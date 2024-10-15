@@ -1,5 +1,10 @@
 package org.example;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class Card {
 
     enum Suit {
@@ -8,7 +13,7 @@ public class Card {
         Spades,
         Diamonds
     }
-    //TODO talk to papa about this!
+    //TODO talk to papa about faceValue being exposed in line 12 of Deck.java
     enum FaceValue {
         Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten,
         Jack, Queen, King, Ace
@@ -20,22 +25,6 @@ public class Card {
 
     public Card(Suit s, FaceValue v) {
         suit = s;
-        faceValue = v;
-    }
-
-    public Suit getSuit() {
-        return suit;
-    }
-
-    public void setSuit(Suit s) {
-        suit = s;
-    }
-
-    public FaceValue getFaceValue() {
-        return faceValue;
-    }
-
-    public void setFaceValue(FaceValue v) {
         faceValue = v;
     }
 

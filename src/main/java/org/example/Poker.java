@@ -10,9 +10,27 @@ public class Poker
     Hand hand = new Hand();
     Hand hand2 = new Hand();
     Pot pot = new Pot();
+    Player player1 = new Player();
+    Player player2 = new Player();
     public void game() {
+        setupPlayers();
+        blinds();
         dealHand();
         dealHand2();
+    }
+
+    private void blinds() {
+        if (player1.getPosition() == Player.Position.BB) {
+
+        }
+    }
+
+    private void setupPlayers() {
+        int startingStack = 300;
+        player1.setStack(startingStack);
+        player2.setStack(startingStack);
+        player1.setPosition(Player.Position.BB);
+        player2.setPosition(Player.Position.SB);
     }
 
     public void deal() {
@@ -24,7 +42,9 @@ public class Poker
         pressEnterToContinue();
         hand.add(deck.pop());
         hand.add(deck.pop());
-        System.out.println(hand.toString());
+        player1.setHand(hand);
+        System.out.println(player1.getHand().toString());
+        System.out.println("Your starting stack is " + player1.getStack());
         System.out.println("Player 1, now hide your hand and continue.");
         pressEnterToContinue();
         hide();
@@ -35,7 +55,9 @@ public class Poker
         pressEnterToContinue();
         hand2.add(deck.pop());
         hand2.add(deck.pop());
-        System.out.println(hand2.toString());
+        player2.setHand(hand2);
+        System.out.println(player2.getHand().toString());
+        System.out.println("Your starting stack is " + player2.getStack());
         System.out.println("Player 2, now hide your hand and continue.");
         pressEnterToContinue();
         hide();
