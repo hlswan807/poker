@@ -10,4 +10,8 @@ public class Hand {
     public String toString() {
         return "Your hand is the " + cards.toString();
     }
+
+    public void clear() {
+        cards.clear();
+    }
 }

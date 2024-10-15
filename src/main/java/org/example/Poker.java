@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 public class Poker
 {
+    int bigBlindAmount = 5;
+    int smallBlindAmount = bigBlindAmount/2;
     Scanner input = new Scanner(System.in);
     Deck deck = new Deck();
     Hand hand = new Hand();
@@ -13,19 +15,21 @@ public class Poker
     Player player1 = new Player();
     Player player2 = new Player();
     public void game() {
-        setupPlayers();
+        setup();
         blinds();
         dealHand();
         dealHand2();
+
     }
 
     private void blinds() {
         if (player1.getPosition() == Player.Position.BB) {
-
+            player1.bet(bigBlindAmount);
+            player2.bet(smallBlindAmount);
         }
     }
 
-    private void setupPlayers() {
+    private void setup() {
         int startingStack = 300;
         player1.setStack(startingStack);
         player2.setStack(startingStack);
