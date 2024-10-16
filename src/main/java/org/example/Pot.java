@@ -8,11 +8,11 @@ import lombok.Setter;
 public class Pot {
     private int chips;
 
-    public Pot() {
+    public void clearChips() {
         chips = 0;
     }
 
-    public void clearChips() {
-        chips = 0;
+    public void add(int chips) {
+        this.chips += chips;
     }
 }

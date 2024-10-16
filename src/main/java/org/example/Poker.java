@@ -31,16 +31,24 @@ public class Poker {
 
 
     public void game() {
-
         betBlinds();
         dealHand();
-        preFlopAction();
+        Player winningPlayer = preFlopAction();
+        if (winningPlayer != null) {
+            endHand(winningPlayer);
+        } else {
+            //todo flop
+        }
 
     }
 
-    private void preFlopAction() {
-        boolean actionContinues = true;
+    private void endHand(Player winningPlayer) {
+        //todo distribute pot
+    }
 
+    private Player preFlopAction() {
+        boolean actionContinues = true;
+        Player winningPlayer = null;
         nextPlayer = dealer;
         incNextPlayerNumber(); //sb
         incNextPlayerNumber(); // bb
@@ -49,19 +57,24 @@ public class Poker {
         for (int i = 0; i < 100; i++) {
             getNextPlayerAction();
             incNextPlayerNumber();
+            winningPlayer = getWinner();
+            if(winningPlayer != null) {
+                System.out.println(winningPlayer.getName() + " is the winner!");
+                break;
+            }
             if (lastRaiser == nextPlayer) {break;}
         }
-
+        return winningPlayer;
     }
 
 
     private void getNextPlayerAction() {
         if (players[nextPlayer].isFolded()) {
             System.out.println("\n"+players[nextPlayer].getName() + " is folded.");
-            return; // GMS - just short-circuit here and return if folded
+            return;
         }
-        // GMS added this to show where everything is at
-        System.out.println("\nAction to -> " + players[nextPlayer].getName() +
+
+        System.out.println("\nAction to -> " + players[nextPlayer].getName() + " " + players[nextPlayer].getHand() +
                 "\n amount to call=" + amountToCall + ", Player's current bet="+players[nextPlayer].getCurrentBet()+", remaining amount to call="+ getRemainingAmountToCall() );
         if (amountToCall == players[nextPlayer].getCurrentBet()) { // if currentPotBet = player currentBet, then actions are ch or f
             System.out.print(" What would you like to do? You can C, Check, or R, Raise.");
@@ -93,6 +106,21 @@ public class Poker {
         players[nextPlayer].fold();
     }
 
+    private Player getWinner() {
+        Player remainingPlayer = null;
+        for(Player player : players) {
+            if (!player.isFolded()) {
+                if (remainingPlayer == null) {
+                    remainingPlayer = player;
+                } else {   //remainingPlayer is not null, at least two players still remaining, no remainingPlayer
+                  return null;
+                }
+
+            }
+        }
+        return remainingPlayer;
+    }
+
     private void nextPlayerRaises() {
         // Original code
 //        System.out.println(players[nextPlayer].getName() + " raises!");
@@ -121,15 +149,15 @@ public class Poker {
     private void nextPlayerCalls() {
         System.out.println(players[nextPlayer].getName() + " calls, amount to call=" + amountToCall +
                 ", remaining amount to call="+ getRemainingAmountToCall());
-        players[nextPlayer].bet(getRemainingAmountToCall());
+        bet(getRemainingAmountToCall());
+        //players[nextPlayer].bet(getRemainingAmountToCall());
     }
 
     private void betBlinds() {
         incNextPlayerNumber();
-        players[nextPlayer].bet(smallBlindAmount);
+        bet(smallBlindAmount);
         incNextPlayerNumber();
-        players[nextPlayer].bet(bigBlindAmount);
-        amountToCall = bigBlindAmount;
+        bet(bigBlindAmount);
     }
     private void incNextPlayerNumber() {
         nextPlayer++;
@@ -139,7 +167,7 @@ public class Poker {
     }
 
     public void dealHand() {
-        System.out.println("Your hand is about to be shown! Everyone else look away! Player, when you are ready to see your hand, press enter.");
+        System.out.println("Press enter to deal.");
         pressEnterToContinue();
         nextPlayer = dealer;
         for (int i = 0; i < players.length; i++) {
@@ -162,6 +190,14 @@ public class Poker {
     public void pressEnterToContinue() {
         System.out.println("------Press Enter to Continue------");
         input.nextLine();
+    }
+
+    private void bet(int amount) {
+        players[nextPlayer].bet(amount);
+        pot.add(amount);
+        if (amount > amountToCall) {
+            amountToCall = amount;
+        }
     }
 
 }
