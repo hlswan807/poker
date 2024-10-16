@@ -25,13 +25,18 @@ public class Player {
     public void bet(int amount) {
         stack -= amount;
         currentBet += amount;
-        System.out.println(name + " bets " + amount + " Current Bet: " + currentBet);
+        System.out.println(" "+name + " bets " + amount + ", Player's current bet=" + currentBet);
 
     }
-    public void call(int currentPotBet) {
-        bet(currentPotBet-currentBet);
-        System.out.println(name + " calls " + currentBet);
-    }
+    // GMS
+    // Call was kind of confusing because to raise, you need to bet to catch up to the current pot amount then bet over that
+    // plus there was information leakage of Poker.currentPotBet into Player
+    // Instead I added a method getCallAmount to poker
+//    public void call(int currentPotBet) {
+//        bet(currentPotBet-currentBet);
+//        System.out.println(name + " calls " + currentBet);
+//    }
+
     public void fold() {
         isFolded = true;
     }

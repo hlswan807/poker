@@ -9,7 +9,10 @@ public class Poker {
     private static final int startingStack = 300;
     int nextPlayer = 0;
     int dealer = 0;
-    int currentPotBet;
+    // GMS
+    // amountToCall is the official name for this in poker
+    // The amountToCall-currentPlayerBetAmount is called the remainingAmountToCall
+    int amountToCall;
     int lastRaiser;
     Scanner input = new Scanner(System.in);
     Deck deck = new Deck();
@@ -53,11 +56,15 @@ public class Poker {
 
 
     private void getNextPlayerAction() {
-        System.out.println("Action to -> " + players[nextPlayer].getName());
         if (players[nextPlayer].isFolded()) {
-            System.out.println(players[nextPlayer].getName() + " is folded.");
-        }else if (currentPotBet == players[nextPlayer].getCurrentBet()) { // if currentPotBet = player currentBet, then actions are ch or f
-            System.out.println("What would you like to do? You can C, Check, or R, Raise.");
+            System.out.println("\n"+players[nextPlayer].getName() + " is folded.");
+            return; // GMS - just short-circuit here and return if folded
+        }
+        // GMS added this to show where everything is at
+        System.out.println("\nAction to -> " + players[nextPlayer].getName() +
+                "\n amount to call=" + amountToCall + ", Player's current bet="+players[nextPlayer].getCurrentBet()+", remaining amount to call="+ getRemainingAmountToCall() );
+        if (amountToCall == players[nextPlayer].getCurrentBet()) { // if currentPotBet = player currentBet, then actions are ch or f
+            System.out.print(" What would you like to do? You can C, Check, or R, Raise.");
             String action = input.nextLine();
             if (action.equalsIgnoreCase("R")) {
                 nextPlayerRaises();
@@ -66,7 +73,7 @@ public class Poker {
             }
         } else { // if currentPotBet < player currentBet, then you need to put in more money.
 
-            System.out.println("What would you like to do? You can F, Fold, C, Call, or R, Raise.");
+            System.out.print(" What would you like to do? You can F, Fold, C, Call, or R, Raise.");
             String action = input.nextLine();
             if (action.equalsIgnoreCase("F")) {
                 nextPlayerFolds();
@@ -76,7 +83,10 @@ public class Poker {
                 nextPlayerRaises();
             }
         }
+        // GMS added this to show where everything is at
+        System.out.println(" amount to call=" + amountToCall);
     }
+
 
     private void nextPlayerFolds() {
         System.out.println(players[nextPlayer].getName() + " folds!");
@@ -84,16 +94,34 @@ public class Poker {
     }
 
     private void nextPlayerRaises() {
-        System.out.println(players[nextPlayer].getName() + " raises!");
+        // Original code
+//        System.out.println(players[nextPlayer].getName() + " raises!");
+//        lastRaiser = nextPlayer;
+//        players[nextPlayer].call(currentPotBet);
+//        players[nextPlayer].bet(5);
+//        currentPotBet += 5; // FIXED HERE. It was: currentPotBet =+ 5 The plus is on the wrong side of the =
+
+        // added this. Instead of calling and raising, do the raising all as one
+        int betAmount = 5;
+        System.out.println(players[nextPlayer].getName() + " raises "+ betAmount+
+                ", plus the remaining amount to call="+ getRemainingAmountToCall()+", total bet="+(getRemainingAmountToCall()+betAmount));
         lastRaiser = nextPlayer;
-        players[nextPlayer].call(currentPotBet);
-        players[nextPlayer].bet(5);
-        currentPotBet =+ 5;
+        players[nextPlayer].bet(getRemainingAmountToCall()+betAmount);
+        amountToCall += betAmount;
 
     }
+    // GMS
+    // added this
+    // remainingAmountToCall is the official name for this in poker. It is the per player amount.
+    // The amountToCall is the highest amount of chips has put in one round (we had called it current pot bet)
+    // remainingAmountToCall=amountToCall-currentPlayerBetAmount
+    public int getRemainingAmountToCall() {
+        return amountToCall -players[nextPlayer].getCurrentBet();
+    }
     private void nextPlayerCalls() {
-        System.out.println(players[nextPlayer].getName() + " calls!" + currentPotBet);
-        players[nextPlayer].call(currentPotBet);
+        System.out.println(players[nextPlayer].getName() + " calls, amount to call=" + amountToCall +
+                ", remaining amount to call="+ getRemainingAmountToCall());
+        players[nextPlayer].bet(getRemainingAmountToCall());
     }
 
     private void betBlinds() {
@@ -101,7 +129,7 @@ public class Poker {
         players[nextPlayer].bet(smallBlindAmount);
         incNextPlayerNumber();
         players[nextPlayer].bet(bigBlindAmount);
-        currentPotBet = bigBlindAmount;
+        amountToCall = bigBlindAmount;
     }
     private void incNextPlayerNumber() {
         nextPlayer++;
