@@ -16,8 +16,6 @@ public class Poker {
     int lastRaiser;
     Scanner input = new Scanner(System.in);
     Deck deck = new Deck();
-    Hand hand = new Hand();
-    Hand hand2 = new Hand();
     Pot pot = new Pot();
     Player[] players;
 
@@ -41,13 +39,35 @@ public class Poker {
         }
 
     }
+    private void betBlinds() {
+        incNextPlayerNumber();
+        bet(smallBlindAmount);
+        incNextPlayerNumber();
+        bet(bigBlindAmount);
+    }
+    public void dealHand() {
+        System.out.println("Press enter to deal.");
+        pressEnterToContinue();
+        nextPlayer = dealer;
+        for (int i = 0; i < players.length; i++) {
+            incNextPlayerNumber();
+            players[nextPlayer].setHand(new Hand());
+        }
+        for(int j = 0; j < 2; j++) {
+            for (int i = 0; i < players.length; i++) {
+                incNextPlayerNumber();
+                players[nextPlayer].add(deck.pop());
+            }
+        }
+        System.out.println("Dealing Complete! Player " + players[nextPlayer].getName() + ", you are first to act. Your cards will be revealed and you can take the first action.");
+        pressEnterToContinue();
+    }
 
     private void endHand(Player winningPlayer) {
         //todo distribute pot
     }
 
     private Player preFlopAction() {
-        boolean actionContinues = true;
         Player winningPlayer = null;
         nextPlayer = dealer;
         incNextPlayerNumber(); //sb
@@ -86,7 +106,7 @@ public class Poker {
             }
         } else { // if currentPotBet < player currentBet, then you need to put in more money.
 
-            System.out.print(" What would you like to do? You can F, Fold, C, Call, or R, Raise.");
+            System.out.print(" What would you like to do? You can F, Fold, C, Call the, or R, Raise.");
             String action = input.nextLine();
             if (action.equalsIgnoreCase("F")) {
                 nextPlayerFolds();
@@ -153,12 +173,7 @@ public class Poker {
         //players[nextPlayer].bet(getRemainingAmountToCall());
     }
 
-    private void betBlinds() {
-        incNextPlayerNumber();
-        bet(smallBlindAmount);
-        incNextPlayerNumber();
-        bet(bigBlindAmount);
-    }
+
     private void incNextPlayerNumber() {
         nextPlayer++;
         if (nextPlayer >= players.length) {
@@ -166,22 +181,7 @@ public class Poker {
         }
     }
 
-    public void dealHand() {
-        System.out.println("Press enter to deal.");
-        pressEnterToContinue();
-        nextPlayer = dealer;
-        for (int i = 0; i < players.length; i++) {
-            incNextPlayerNumber();
-            players[nextPlayer].setHand(new Hand());
-        }
-        for(int j = 0; j < 2; j++) {
-            for (int i = 0; i < players.length; i++) {
-                incNextPlayerNumber();
-                players[nextPlayer].add(deck.pop());
-            }
-        }
-        pressEnterToContinue();
-    }
+
     public void hide() {
         for (int i = 0; i < 50; ++i) System.out.println();
         System.out.println("Console cleared!");

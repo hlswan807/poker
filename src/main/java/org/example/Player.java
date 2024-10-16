@@ -43,7 +43,7 @@ public class Player {
 
     public void add(Card card) {
         hand.add(card);
-        System.out.println(name + " is dealt " + card.toString());
+        //System.out.println(name + " is dealt " + card.toString());
     }
 
 }
