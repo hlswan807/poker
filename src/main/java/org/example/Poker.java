@@ -53,9 +53,10 @@ public class Poker {
 
 
     private void getNextPlayerAction() {
-
-        // if currentPotBet = player currentBet, then actions are ch or f
-        if (currentPotBet == players[nextPlayer].getCurrentBet()) {
+        System.out.println("Action to -> " + players[nextPlayer].getName());
+        if (players[nextPlayer].isFolded()) {
+            System.out.println(players[nextPlayer].getName() + " is folded.");
+        }else if (currentPotBet == players[nextPlayer].getCurrentBet()) { // if currentPotBet = player currentBet, then actions are ch or f
             System.out.println("What would you like to do? You can C, Check, or R, Raise.");
             String action = input.nextLine();
             if (action.equalsIgnoreCase("R")) {
@@ -68,18 +69,31 @@ public class Poker {
             System.out.println("What would you like to do? You can F, Fold, C, Call, or R, Raise.");
             String action = input.nextLine();
             if (action.equalsIgnoreCase("F")) {
-                System.out.println("You fold!");
+                nextPlayerFolds();
             } else if (action.equalsIgnoreCase("C")) {
-                System.out.println("You call");
+                nextPlayerCalls();
             } else if (action.equalsIgnoreCase("R")) {
                 nextPlayerRaises();
             }
         }
     }
 
+    private void nextPlayerFolds() {
+        System.out.println(players[nextPlayer].getName() + " folds!");
+        players[nextPlayer].fold();
+    }
+
     private void nextPlayerRaises() {
         System.out.println(players[nextPlayer].getName() + " raises!");
         lastRaiser = nextPlayer;
+        players[nextPlayer].call(currentPotBet);
+        players[nextPlayer].bet(5);
+        currentPotBet =+ 5;
+
+    }
+    private void nextPlayerCalls() {
+        System.out.println(players[nextPlayer].getName() + " calls!" + currentPotBet);
+        players[nextPlayer].call(currentPotBet);
     }
 
     private void betBlinds() {

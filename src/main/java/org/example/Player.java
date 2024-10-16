@@ -10,10 +10,7 @@ public class Player {
     private Hand hand;
     private String name;
     private int currentBet;
-
-
-
-
+    private boolean isFolded = false;
     enum Position {
         UTG, UTGPlus1, UTGPlus2, LG, HJ, CO, BTN, SB, BB,
     }
@@ -31,7 +28,13 @@ public class Player {
         System.out.println(name + " bets " + amount + " Current Bet: " + currentBet);
 
     }
-
+    public void call(int currentPotBet) {
+        bet(currentPotBet-currentBet);
+        System.out.println(name + " calls " + currentBet);
+    }
+    public void fold() {
+        isFolded = true;
+    }
 
     public void add(Card card) {
         hand.add(card);
