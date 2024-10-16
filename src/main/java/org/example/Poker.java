@@ -3,70 +3,115 @@ package org.example;
 import java.util.Scanner;
 
 
-public class Poker
-{
-    int bigBlindAmount = 5;
-    int smallBlindAmount = bigBlindAmount/2;
+public class Poker {
+    final int smallBlindAmount = 2;
+    final int bigBlindAmount = smallBlindAmount*2;
+    private static final int startingStack = 300;
+    int nextPlayer = 0;
+    int dealer = 0;
+    int currentPotBet;
+    int lastRaiser;
     Scanner input = new Scanner(System.in);
     Deck deck = new Deck();
     Hand hand = new Hand();
     Hand hand2 = new Hand();
     Pot pot = new Pot();
-    Player player1 = new Player();
-    Player player2 = new Player();
-    public void game() {
-        setup();
-        blinds();
-        dealHand();
-        dealHand2();
+    Player[] players;
 
-    }
 
-    private void blinds() {
-        if (player1.getPosition() == Player.Position.BB) {
-            player1.bet(bigBlindAmount);
-            player2.bet(smallBlindAmount);
+    public Poker(int numPlayers) {
+        players = new Player[numPlayers];
+        for (int i = 0; i < numPlayers; i++) {
+            players[i] = new Player(i+"", startingStack);
         }
     }
 
-    private void setup() {
-        int startingStack = 300;
-        player1.setStack(startingStack);
-        player2.setStack(startingStack);
-        player1.setPosition(Player.Position.BB);
-        player2.setPosition(Player.Position.SB);
+
+    public void game() {
+
+        betBlinds();
+        dealHand();
+        preFlopAction();
+
     }
 
-    public void deal() {
-        hand.add(deck.pop());
+    private void preFlopAction() {
+        boolean actionContinues = true;
+
+        nextPlayer = dealer;
+        incNextPlayerNumber(); //sb
+        incNextPlayerNumber(); // bb
+        incNextPlayerNumber(); //utg
+        lastRaiser = nextPlayer;
+        for (int i = 0; i < 100; i++) {
+            getNextPlayerAction();
+            incNextPlayerNumber();
+            if (lastRaiser == nextPlayer) {break;}
+        }
+
+    }
+
+
+    private void getNextPlayerAction() {
+
+        // if currentPotBet = player currentBet, then actions are ch or f
+        if (currentPotBet == players[nextPlayer].getCurrentBet()) {
+            System.out.println("What would you like to do? You can C, Check, or R, Raise.");
+            String action = input.nextLine();
+            if (action.equalsIgnoreCase("R")) {
+                nextPlayerRaises();
+            } else if (action.equalsIgnoreCase("C")) {
+                System.out.println("You check");
+            }
+        } else { // if currentPotBet < player currentBet, then you need to put in more money.
+
+            System.out.println("What would you like to do? You can F, Fold, C, Call, or R, Raise.");
+            String action = input.nextLine();
+            if (action.equalsIgnoreCase("F")) {
+                System.out.println("You fold!");
+            } else if (action.equalsIgnoreCase("C")) {
+                System.out.println("You call");
+            } else if (action.equalsIgnoreCase("R")) {
+                nextPlayerRaises();
+            }
+        }
+    }
+
+    private void nextPlayerRaises() {
+        System.out.println(players[nextPlayer].getName() + " raises!");
+        lastRaiser = nextPlayer;
+    }
+
+    private void betBlinds() {
+        incNextPlayerNumber();
+        players[nextPlayer].bet(smallBlindAmount);
+        incNextPlayerNumber();
+        players[nextPlayer].bet(bigBlindAmount);
+        currentPotBet = bigBlindAmount;
+    }
+    private void incNextPlayerNumber() {
+        nextPlayer++;
+        if (nextPlayer >= players.length) {
+            nextPlayer = 0;
+        }
     }
 
     public void dealHand() {
-        System.out.println("Player 1, your hand is about to be shown! Everyone else look away! Player, when you are ready to see your hand, press enter.");
+        System.out.println("Your hand is about to be shown! Everyone else look away! Player, when you are ready to see your hand, press enter.");
         pressEnterToContinue();
-        hand.add(deck.pop());
-        hand.add(deck.pop());
-        player1.setHand(hand);
-        System.out.println(player1.getHand().toString());
-        System.out.println("Your starting stack is " + player1.getStack());
-        System.out.println("Player 1, now hide your hand and continue.");
+        nextPlayer = dealer;
+        for (int i = 0; i < players.length; i++) {
+            incNextPlayerNumber();
+            players[nextPlayer].setHand(new Hand());
+        }
+        for(int j = 0; j < 2; j++) {
+            for (int i = 0; i < players.length; i++) {
+                incNextPlayerNumber();
+                players[nextPlayer].add(deck.pop());
+            }
+        }
         pressEnterToContinue();
-        hide();
     }
-
-    public void dealHand2() {
-        System.out.println("Player 2, your hand is about to be shown! Everyone else look away! Player, when you are ready to see your hand, press enter.");
-        pressEnterToContinue();
-        hand2.add(deck.pop());
-        hand2.add(deck.pop());
-        player2.setHand(hand2);
-        System.out.println(player2.getHand().toString());
-        System.out.println("Your starting stack is " + player2.getStack());
-        System.out.println("Player 2, now hide your hand and continue.");
-        pressEnterToContinue();
-        hide();
-    }
-
     public void hide() {
         for (int i = 0; i < 50; ++i) System.out.println();
         System.out.println("Console cleared!");

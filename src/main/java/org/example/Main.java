@@ -5,10 +5,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        Poker poker = new Poker();
-        System.out.println("Welcome to Poker! You are playing against three NPCs in a game of Texas Holdem! Good Luck!");
-        System.out.println("------Press Enter to Continue------");
-        input.nextLine();
+
+        System.out.println("Welcome to Poker!in a game of Texas Holdem! Good Luck!");
+        System.out.println("------How many players do you have?------");
+        Poker poker = new Poker(input.nextInt());
         poker.game();
 
 
