@@ -17,7 +17,9 @@ public class Poker {
     Scanner input = new Scanner(System.in);
     Deck deck = new Deck();
     Pot pot = new Pot();
+    Board board = new Board();
     Player[] players;
+
 
 
     public Poker(int numPlayers) {
@@ -35,10 +37,13 @@ public class Poker {
         if (winningPlayer != null) {
             endHand(winningPlayer);
         } else {
-            //todo flop
+            dealFlop();
         }
 
     }
+
+
+
     private void betBlinds() {
         incNextPlayerNumber();
         System.out.println(nextPlayerName() + " is the SB and puts in " + smallBlindAmount);
@@ -67,11 +72,7 @@ public class Poker {
         pressEnterToContinue();
     }
 
-    private void endHand(Player winningPlayer) {
-        winningPlayer.addChips(pot.getChips());
-        System.out.println(winningPlayer.getName() + " now has " + winningPlayer.getStack() + " chips.");
-        pot.clearChips();
-    }
+
 
     private Player preFlopAction() {
         Player winningPlayer = null;
@@ -93,6 +94,24 @@ public class Poker {
             if (lastRaiser == nextPlayerNum) {break;}
         }
         return winningPlayer;
+    }
+
+    private void dealFlop() {
+        deck.pop(); // burn card
+        board.add(deck.pop());
+        board.add(deck.pop());
+        board.add(deck.pop());
+        System.out.println(board.toString());
+    }
+
+    private void flopAction() {
+
+    }
+
+    private void endHand(Player winningPlayer) {
+        winningPlayer.addChips(pot.getChips());
+        System.out.println(winningPlayer.getName() + " now has " + winningPlayer.getStack() + " chips.");
+        pot.clearChips();
     }
 
 
