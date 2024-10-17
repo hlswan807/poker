@@ -3,7 +3,6 @@ package org.example;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.annotation.processing.Generated;
 @Getter @Setter
 public class Player {
     private int stack;
@@ -41,9 +40,13 @@ public class Player {
         isFolded = true;
     }
 
-    public void add(Card card) {
+    public void addCard(Card card) {
         hand.add(card);
         //System.out.println(name + " is dealt " + card.toString());
+    }
+
+    public void addChips(int chips) {
+        stack += chips;
     }
 
 }

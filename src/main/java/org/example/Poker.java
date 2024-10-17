@@ -7,7 +7,7 @@ public class Poker {
     final int smallBlindAmount = 2;
     final int bigBlindAmount = smallBlindAmount*2;
     private static final int startingStack = 300;
-    int nextPlayer = 0;
+    int nextPlayerNum = 0;
     int dealer = 0;
     // GMS
     // amountToCall is the official name for this in poker
@@ -23,7 +23,7 @@ public class Poker {
     public Poker(int numPlayers) {
         players = new Player[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
-            players[i] = new Player(i+"", startingStack);
+            players[i] = new Player("p"+i, startingStack);
         }
     }
 
@@ -41,72 +41,81 @@ public class Poker {
     }
     private void betBlinds() {
         incNextPlayerNumber();
+        System.out.println(nextPlayerName() + " is the SB and puts in " + smallBlindAmount);
         bet(smallBlindAmount);
         incNextPlayerNumber();
+        System.out.println(nextPlayerName() + " is the BB and puts in " + bigBlindAmount);
         bet(bigBlindAmount);
+        amountToCall = bigBlindAmount;
     }
     public void dealHand() {
         System.out.println("Press enter to deal.");
         pressEnterToContinue();
-        nextPlayer = dealer;
+        nextPlayerNum = dealer;
+        deck.pop(); // burn card
         for (int i = 0; i < players.length; i++) {
             incNextPlayerNumber();
-            players[nextPlayer].setHand(new Hand());
+            players[nextPlayerNum].setHand(new Hand());
         }
         for(int j = 0; j < 2; j++) {
             for (int i = 0; i < players.length; i++) {
                 incNextPlayerNumber();
-                players[nextPlayer].add(deck.pop());
+                players[nextPlayerNum].addCard(deck.pop());
             }
         }
-        System.out.println("Dealing Complete! Player " + players[nextPlayer].getName() + ", you are first to act. Your cards will be revealed and you can take the first action.");
+        System.out.println("Dealing Complete! Player " + nextPlayerName() + ", you are first to act. Your cards will be revealed and you can take the first action.");
         pressEnterToContinue();
     }
 
     private void endHand(Player winningPlayer) {
-        //todo distribute pot
+        winningPlayer.addChips(pot.getChips());
+        System.out.println(winningPlayer.getName() + " now has " + winningPlayer.getStack() + " chips.");
+        pot.clearChips();
     }
 
     private Player preFlopAction() {
         Player winningPlayer = null;
-        nextPlayer = dealer;
+        nextPlayerNum = dealer;
         incNextPlayerNumber(); //sb
         incNextPlayerNumber(); // bb
         incNextPlayerNumber(); //utg
-        lastRaiser = nextPlayer;
+        lastRaiser = nextPlayerNum;
         for (int i = 0; i < 100; i++) {
             getNextPlayerAction();
+            //hide();
             incNextPlayerNumber();
+
             winningPlayer = getWinner();
             if(winningPlayer != null) {
                 System.out.println(winningPlayer.getName() + " is the winner!");
                 break;
             }
-            if (lastRaiser == nextPlayer) {break;}
+            if (lastRaiser == nextPlayerNum) {break;}
         }
         return winningPlayer;
     }
 
 
     private void getNextPlayerAction() {
-        if (players[nextPlayer].isFolded()) {
-            System.out.println("\n"+players[nextPlayer].getName() + " is folded.");
+        if (players[nextPlayerNum].isFolded()) {
+            System.out.println("\n"+nextPlayerName() + " is folded.");
             return;
         }
 
-        System.out.println("\nAction to -> " + players[nextPlayer].getName() + " " + players[nextPlayer].getHand() +
-                "\n amount to call=" + amountToCall + ", Player's current bet="+players[nextPlayer].getCurrentBet()+", remaining amount to call="+ getRemainingAmountToCall() );
-        if (amountToCall == players[nextPlayer].getCurrentBet()) { // if currentPotBet = player currentBet, then actions are ch or f
+        System.out.println("\nAction to -> " + nextPlayerName() + " " + players[nextPlayerNum].getHand() +
+                "\n Pot=" + pot.getChips() +
+                "\n amount to call=" + amountToCall + ", Player's current bet="+players[nextPlayerNum].getCurrentBet()+", remaining amount to call="+ getRemainingAmountToCall() );
+        if (amountToCall == players[nextPlayerNum].getCurrentBet()) { // if currentPotBet = player currentBet, then actions are ch or f
             System.out.print(" What would you like to do? You can C, Check, or R, Raise.");
             String action = input.nextLine();
             if (action.equalsIgnoreCase("R")) {
                 nextPlayerRaises();
             } else if (action.equalsIgnoreCase("C")) {
-                System.out.println("You check");
+                System.out.println(nextPlayerName() + " checks");
             }
         } else { // if currentPotBet < player currentBet, then you need to put in more money.
 
-            System.out.print(" What would you like to do? You can F, Fold, C, Call the, or R, Raise.");
+            System.out.print(" What would you like to do? You can F, Fold, C, Call(" + amountToCall + " to call), or R, Raise.");
             String action = input.nextLine();
             if (action.equalsIgnoreCase("F")) {
                 nextPlayerFolds();
@@ -116,14 +125,14 @@ public class Poker {
                 nextPlayerRaises();
             }
         }
-        // GMS added this to show where everything is at
-        System.out.println(" amount to call=" + amountToCall);
+
+        //System.out.println(" amount to call=" + amountToCall);
     }
 
 
     private void nextPlayerFolds() {
-        System.out.println(players[nextPlayer].getName() + " folds!");
-        players[nextPlayer].fold();
+        System.out.println(nextPlayerName() + " folds!");
+        players[nextPlayerNum].fold();
     }
 
     private Player getWinner() {
@@ -142,19 +151,13 @@ public class Poker {
     }
 
     private void nextPlayerRaises() {
-        // Original code
-//        System.out.println(players[nextPlayer].getName() + " raises!");
-//        lastRaiser = nextPlayer;
-//        players[nextPlayer].call(currentPotBet);
-//        players[nextPlayer].bet(5);
-//        currentPotBet += 5; // FIXED HERE. It was: currentPotBet =+ 5 The plus is on the wrong side of the =
-
-        // added this. Instead of calling and raising, do the raising all as one
-        int betAmount = 5;
-        System.out.println(players[nextPlayer].getName() + " raises "+ betAmount+
+        System.out.println(" How much do you want to raise by?");
+        int betAmount = input.nextInt();
+        input.nextLine();
+        System.out.println(nextPlayerName() + " raises "+ betAmount+
                 ", plus the remaining amount to call="+ getRemainingAmountToCall()+", total bet="+(getRemainingAmountToCall()+betAmount));
-        lastRaiser = nextPlayer;
-        players[nextPlayer].bet(getRemainingAmountToCall()+betAmount);
+        lastRaiser = nextPlayerNum;
+        bet(getRemainingAmountToCall() + betAmount);
         amountToCall += betAmount;
 
     }
@@ -164,27 +167,27 @@ public class Poker {
     // The amountToCall is the highest amount of chips has put in one round (we had called it current pot bet)
     // remainingAmountToCall=amountToCall-currentPlayerBetAmount
     public int getRemainingAmountToCall() {
-        return amountToCall -players[nextPlayer].getCurrentBet();
+        return amountToCall -players[nextPlayerNum].getCurrentBet();
     }
     private void nextPlayerCalls() {
-        System.out.println(players[nextPlayer].getName() + " calls, amount to call=" + amountToCall +
+        System.out.println(nextPlayerName() + " calls, amount to call=" + amountToCall +
                 ", remaining amount to call="+ getRemainingAmountToCall());
         bet(getRemainingAmountToCall());
-        //players[nextPlayer].bet(getRemainingAmountToCall());
+
     }
 
 
     private void incNextPlayerNumber() {
-        nextPlayer++;
-        if (nextPlayer >= players.length) {
-            nextPlayer = 0;
+        nextPlayerNum++;
+        if (nextPlayerNum >= players.length) {
+            nextPlayerNum = 0;
         }
     }
 
 
     public void hide() {
         for (int i = 0; i < 50; ++i) System.out.println();
-        System.out.println("Console cleared!");
+        //System.out.println("Console cleared!");
     }
 
     public void pressEnterToContinue() {
@@ -193,11 +196,12 @@ public class Poker {
     }
 
     private void bet(int amount) {
-        players[nextPlayer].bet(amount);
+        players[nextPlayerNum].bet(amount);
         pot.add(amount);
-        if (amount > amountToCall) {
-            amountToCall = amount;
-        }
+    }
+    
+    private String nextPlayerName() {
+        return players[nextPlayerNum].getName();
     }
 
 }
