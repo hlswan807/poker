@@ -4,9 +4,11 @@ import java.util.Scanner;
 
 
 public class Poker {
-    final int smallBlindAmount = 2;
+    final int smallBlindAmount = 5;
     final int bigBlindAmount = smallBlindAmount*2;
-    private static final int startingStack = 300;
+    final int lowBettingLimit = smallBlindAmount*2;
+    final int highBettingLimit = lowBettingLimit*2;
+    private static final int startingStack = 1000;
     int nextPlayerNum = 0;
     int dealer = 0;
     // GMS
@@ -34,14 +36,21 @@ public class Poker {
         betBlinds();
         dealHand();
         Player winningPlayer = preFlopAction();
-        if (winningPlayer != null) {
-            endHand(winningPlayer);
-        } else {
-            dealFlop();
-        }
-
+        doesGameContinue(winningPlayer);
+        dealFlop();
+        winningPlayer = flopAction();
+        doesGameContinue(winningPlayer);
+        dealRiver();
+        winningPlayer = riverAction();
     }
 
+
+
+    private void doesGameContinue(Player winningPlayer) {
+        if (winningPlayer != null) {
+            endHand(winningPlayer);
+        }
+    }
 
 
     private void betBlinds() {
@@ -68,7 +77,7 @@ public class Poker {
                 players[nextPlayerNum].addCard(deck.pop());
             }
         }
-        System.out.println("Dealing Complete! Player " + nextPlayerName() + ", you are first to act. Your cards will be revealed and you can take the first action.");
+        System.out.println("Dealing Complete! Player " + 3 + ", you are first to act. Your cards will be revealed and you can take the first action.");
         pressEnterToContinue();
     }
 
@@ -104,8 +113,46 @@ public class Poker {
         System.out.println(board.toString());
     }
 
-    private void flopAction() {
+    private Player flopAction() {
+        Player winningPlayer = null;
+        nextPlayerNum = dealer+1;
+        lastRaiser = nextPlayerNum;
+        for (int i = 0; i < 100; i++) {
+            getNextPlayerAction();
 
+            incNextPlayerNumber();
+
+            winningPlayer = getWinner();
+            if(winningPlayer != null) {
+                System.out.println(winningPlayer.getName() + " is the winner!");
+                break;
+            }
+            if (lastRaiser == nextPlayerNum) {break;}
+        }
+        return winningPlayer;
+    }
+    private void dealRiver() {
+        deck.pop();
+        board.add(deck.pop());
+        System.out.println(board.toString());
+    }
+    private Player riverAction() {
+        Player winningPlayer = null;
+        nextPlayerNum = dealer+1;
+        lastRaiser = nextPlayerNum;
+        for (int i = 0; i < 100; i++) {
+            getNextPlayerAction();
+
+            incNextPlayerNumber();
+
+            winningPlayer = getWinner();
+            if(winningPlayer != null) {
+                System.out.println(winningPlayer.getName() + " is the winner!");
+                break;
+            }
+            if (lastRaiser == nextPlayerNum) {break;}
+        }
+        return winningPlayer;
     }
 
     private void endHand(Player winningPlayer) {
@@ -134,7 +181,7 @@ public class Poker {
             }
         } else { // if currentPotBet < player currentBet, then you need to put in more money.
 
-            System.out.print(" What would you like to do? You can F, Fold, C, Call(" + amountToCall + " to call), or R, Raise.");
+            System.out.print(" What would you like to do? You can F, Fold, C, Call(" + getRemainingAmountToCall() + " to call), or R, Raise.");
             String action = input.nextLine();
             if (action.equalsIgnoreCase("F")) {
                 nextPlayerFolds();
