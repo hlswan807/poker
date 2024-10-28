@@ -11,7 +11,6 @@ public class Poker {
     private static final int startingStack = 1000;
     int nextPlayerNum = 0;
     int dealer = 0;
-    // GMS
     // amountToCall is the official name for this in poker
     // The amountToCall-currentPlayerBetAmount is called the remainingAmountToCall
     int amountToCall;
@@ -21,6 +20,7 @@ public class Poker {
     Pot pot = new Pot();
     Board board = new Board();
     Player[] players;
+
 
 
 
@@ -38,10 +38,15 @@ public class Poker {
         Player winningPlayer = preFlopAction();
         doesGameContinue(winningPlayer);
         dealFlop();
-        winningPlayer = flopAction();
+        winningPlayer = action();
+        doesGameContinue(winningPlayer);
+        dealTurn();
+        winningPlayer = action();
         doesGameContinue(winningPlayer);
         dealRiver();
-        winningPlayer = riverAction();
+        winningPlayer = action();
+        doesGameContinue(winningPlayer);
+
     }
 
 
@@ -110,10 +115,10 @@ public class Poker {
         board.add(deck.pop());
         board.add(deck.pop());
         board.add(deck.pop());
-        System.out.println(board.toString());
+        printBoard();
     }
 
-    private Player flopAction() {
+    private Player action() {
         Player winningPlayer = null;
         nextPlayerNum = dealer+1;
         lastRaiser = nextPlayerNum;
@@ -130,30 +135,23 @@ public class Poker {
             if (lastRaiser == nextPlayerNum) {break;}
         }
         return winningPlayer;
+    }
+    private void dealTurn() {
+        deck.pop(); // burn card
+        board.add(deck.pop());
+        printBoard();
     }
     private void dealRiver() {
-        deck.pop();
+        deck.pop(); // burn card
         board.add(deck.pop());
-        System.out.println(board.toString());
+        printBoard();
     }
-    private Player riverAction() {
-        Player winningPlayer = null;
-        nextPlayerNum = dealer+1;
-        lastRaiser = nextPlayerNum;
-        for (int i = 0; i < 100; i++) {
-            getNextPlayerAction();
+    private Player showdown() {
+        Player winningPlayer;
 
-            incNextPlayerNumber();
-
-            winningPlayer = getWinner();
-            if(winningPlayer != null) {
-                System.out.println(winningPlayer.getName() + " is the winner!");
-                break;
-            }
-            if (lastRaiser == nextPlayerNum) {break;}
-        }
         return winningPlayer;
     }
+
 
     private void endHand(Player winningPlayer) {
         winningPlayer.addChips(pot.getChips());
@@ -161,13 +159,12 @@ public class Poker {
         pot.clearChips();
     }
 
-
     private void getNextPlayerAction() {
         if (players[nextPlayerNum].isFolded()) {
             System.out.println("\n"+nextPlayerName() + " is folded.");
             return;
         }
-
+        printBoard();
         System.out.println("\nAction to -> " + nextPlayerName() + " " + players[nextPlayerNum].getHand() +
                 "\n Pot=" + pot.getChips() +
                 "\n amount to call=" + amountToCall + ", Player's current bet="+players[nextPlayerNum].getCurrentBet()+", remaining amount to call="+ getRemainingAmountToCall() );
@@ -268,6 +265,10 @@ public class Poker {
     
     private String nextPlayerName() {
         return players[nextPlayerNum].getName();
+    }
+
+    private void printBoard() {
+        System.out.println(board.toString());
     }
 
 }
