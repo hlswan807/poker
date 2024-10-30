@@ -6,14 +6,16 @@ import lombok.Setter;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class HandCalculator {
 
-
-    public Player calculateWinner(Player[] players) {
-        List<Hand> hands = new LinkedList<>();
+    public static Player calculateWinner(Player[] players, Board board) {
         for (Player player : players) {
-            hands.add(player.getHand());
+            List<Card> hand = player.getHand();
+            if (board.canContainRoyalFlush(hand)) {
+                return player; // Return the player with a royal flush
+            }
         }
+        return null; // No player has a royal flush
     }
-
 }

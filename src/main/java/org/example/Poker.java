@@ -46,6 +46,7 @@ public class Poker {
         dealRiver();
         winningPlayer = action();
         doesGameContinue(winningPlayer);
+        winningPlayer = HandCalculator.calculateWinner(players, board);
 
     }
 
@@ -145,11 +146,6 @@ public class Poker {
         deck.pop(); // burn card
         board.add(deck.pop());
         printBoard();
-    }
-    private Player showdown() {
-        Player winningPlayer;
-
-        return winningPlayer;
     }
 
 
