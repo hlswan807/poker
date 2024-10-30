@@ -11,7 +11,7 @@ public class HandCalculator {
 
     public static Player calculateWinner(Player[] players, Board board) {
         for (Player player : players) {
-            List<Card> hand = player.getHand();
+            List<Card> hand = player.getHand().getCards();
             if (board.canContainRoyalFlush(hand)) {
                 return player; // Return the player with a royal flush
             }

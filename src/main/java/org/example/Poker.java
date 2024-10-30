@@ -47,6 +47,7 @@ public class Poker {
         winningPlayer = action();
         doesGameContinue(winningPlayer);
         winningPlayer = HandCalculator.calculateWinner(players, board);
+        System.out.println(winningPlayer);
 
     }
 

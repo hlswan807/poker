@@ -11,6 +11,10 @@ public class Hand {
         return "Your hand is the " + cards.toString();
     }
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
     public void clear() {
         cards.clear();
     }

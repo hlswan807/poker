@@ -35,6 +35,7 @@ public class Board {
         return false; // No royal flush found
     }
 
+
     public String toString() {
         return "The board is " + cards.toString();
     }
