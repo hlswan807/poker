@@ -17,6 +17,7 @@ public class HandCalculator {
     }
 
     public Player calculateWinner(Board board) {
+        Player winningPlayer = null;
         for (Player player : players) {
             combined.addAll(player.getHand().getCards()); // combine hand and board cards
             combined.addAll(board.getCards());
@@ -25,11 +26,12 @@ public class HandCalculator {
             if (hasRoyalFlush()) {
                 player.setHandValue(Player.HandValue.ROYAL_FLUSH);
                 player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a Royal Flush");
+                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                winningPlayer = player;
             } else if (hasStraightFlush()) {
                 player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
                 player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a Straight Flush");
+                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
             } else if (hasFourOfAKind()) {
                 player.setHandValue(Player.HandValue.FOUR_OF_A_KIND);
                 player.setHighCard(getHighCardInHand(combined));
@@ -60,15 +62,19 @@ public class HandCalculator {
                 System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
             } else {
                 player.setHandValue(Player.HandValue.HIGH_CARD);
-                player.setHighCard(combined.getLast());
+                player.setHighCard(getHighCardInHand(combined));
                 System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            }
-            if (combined.getLast() == getHighCardInHand(combined)) {
-                System.out.println("You should replace getHighCardInHand");
             }
             combined.clear();
         }
-        return null; //No player won?? should never reach here
+        for (Player player : players) {
+            if (player.getHandValue().equals(Player.HandValue.ROYAL_FLUSH)) {
+                winningPlayer = player;
+            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.STRAIGHT_FLUSH))) {
+                winningPlayer = player;
+            }
+        }
+        return winningPlayer;
     }
 
     private void sortByValue() {
