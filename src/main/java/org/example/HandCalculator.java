@@ -45,20 +45,23 @@ public class HandCalculator {
         return false; // No royal flush found
     }
 
-    private static Player.HandValue isStraightFlush() {
-        if (hasFlush() == Player.HandValue.FLUSH && hasStraight() == Player.HandValue.STRAIGHT) {
-            return Player.HandValue.STRAIGHT_FLUSH;
-        }
-        return null;
+    private static boolean isStraightFlush() {
+        return hasFlush() && hasStraight();
     }
 
-
-
-    private static Player.HandValue hasFlush() {
-        return null;
+    private static boolean hasFlush() {
+        return false;
     }
 
-    private static Player.HandValue hasStraight() {
-        return null;
+    private static boolean hasStraight() {
+        return false;
+    }
+
+    private static int hasSameValue() {
+        int faceCount = 0;
+        return faceCount;
+    }
+    private static boolean countPairs(int numOfPairs) {
+        return false;
     }
 }
