@@ -54,7 +54,7 @@ public class HandCalculator {
                 player.setHighCard(combined.getLast());
             }
 
-            
+            combined.clear();
         }
         return null; //No player won?? should never reach here
     }
