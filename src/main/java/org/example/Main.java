@@ -11,6 +11,7 @@ public class Main {
         System.out.println("Welcome to Poker! It is Texas Holdem! Good Luck!");
         System.out.println("------How many players do you have?------");
         Poker poker = new Poker(input.nextInt());
+        input.nextLine();
 
         while (playContinues) {
             poker.game();
