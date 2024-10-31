@@ -19,7 +19,6 @@ public class Board {
         cards.clear();
     } // for end of the game
 
-
     public String toString() {
         return "The board is " + cards.toString();
     }

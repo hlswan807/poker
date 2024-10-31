@@ -8,28 +8,52 @@ import java.util.*;
 @Setter
 @Getter
 public class HandCalculator {
-    private static List<Card> combined = new LinkedList<>();
+    private List<Card> combined = new LinkedList<>();
+    private Player[] players;
+    private Board board;
 
-    public static Player calculateWinner(Player[] players, Board board) {
+    public HandCalculator(Player[] p) {
+        players = p;
+    }
+
+    public Player calculateWinner(Board board) {
         for (Player player : players) {
             combined.addAll(player.getHand().getCards()); // combine hand and board cards
             combined.addAll(board.getCards());
             sortByValue();
             if (isRoyalFlush()) {
-                return player;
+                return player; // this player is the winner, does not account for ties yet
             } else if (hasStraightFlush()) {
                 player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
+            } else if (hasFourOfAKind()) {
+                player.setHandValue(Player.HandValue.FOUR_OF_A_KIND);
+            } else if (hasFullHouse()) {
+                player.setHandValue(Player.HandValue.FULL_HOUSE);
+            } else if (hasFlush()) {
+                player.setHandValue(Player.HandValue.FLUSH);
+            } else if (hasStraight()) {
+                player.setHandValue(Player.HandValue.STRAIGHT);
+            } else if (hasThreeOfAKind()) {
+                player.setHandValue(Player.HandValue.THREE_OF_A_KIND);
+            } else if (hasTwoPair()) {
+                player.setHandValue(Player.HandValue.TWO_PAIR);
+            }else if (hasTwoOfAKind()) {
+                player.setHandValue(Player.HandValue.PAIR);
+            } else {
+                player.setHandValue(Player.HandValue.HIGH_CARD);
             }
-
+            
         }
         return null; //No player won?? should never reach here
     }
 
-    private static void sortByValue() {
+    
+
+    private void sortByValue() {
         combined.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal())); // sorts the cards by face value, lowest to highest
     }
 
-    private static boolean isRoyalFlush() {
+    private boolean isRoyalFlush() {
 
         // Check for each suit if it contains the royal flush
         for (Card.Suit suit : Card.Suit.values()) {
@@ -46,7 +70,7 @@ public class HandCalculator {
         return false; // No royal flush found
     }
 
-    private static boolean hasStraightFlush() {
+    private boolean hasStraightFlush() {
         // Group cards by suit
         Map<Card.Suit, List<Card>> suitToCards = new HashMap<>();
         for (Card card : combined) {
@@ -82,7 +106,7 @@ public class HandCalculator {
     /*
         hasFlush runs through each suit and counts the number of each suit. If any are over 5, that is a flush
     */
-    private static boolean hasFlush() {
+    private boolean hasFlush() {
         for (Card.Suit suit : Card.Suit.values()) {
             long suitCount = combined.stream().filter(card -> card.getSuit() == suit).count();
             if (suitCount >= 5) return true;
@@ -92,19 +116,22 @@ public class HandCalculator {
     /*
         hasStraight gets the ordered hand and starts a count with the value of the cards
      */
-    private static boolean hasStraight() {
+    private boolean hasStraight() {
         return false;
     }
-    private static boolean hasFourOfAKind() {
+    private boolean hasFourOfAKind() {
         return hasSameValue(4);
     }
-    private static boolean hasFullHouse() {
+    private boolean hasFullHouse() {
         return hasTwoOfAKind() && hasThreeOfAKind();
     }
-    private static boolean hasThreeOfAKind() {
+    private boolean hasThreeOfAKind() {
         return hasSameValue(3);
     }
-    private static boolean hasTwoOfAKind() {
+    private boolean hasTwoPair() {
+        return false;
+    }
+    private boolean hasTwoOfAKind() {
         return hasSameValue(2);
     }
     /*
@@ -113,7 +140,7 @@ public class HandCalculator {
         count = 2
         checks if there are a pair of any two cards in the hand.
      */
-    private static boolean hasSameValue(int count) {
+    private boolean hasSameValue(int count) {
         Map<Card.FaceValue, Integer> faceCount = new HashMap<>();
 
         for (Card card : combined) {
@@ -121,7 +148,7 @@ public class HandCalculator {
         }
         return faceCount.containsValue(count);
     }
-    private static int countPairs() {
+    private int countPairs() {
         Map<Card.FaceValue, Integer> faceCount = new HashMap<>(); //maps the face value as the key and the integer as the value
 
         for (Card card : combined) {

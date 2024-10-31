@@ -20,6 +20,7 @@ public class Poker {
     Pot pot = new Pot();
     Board board = new Board();
     Player[] players;
+    HandCalculator handCalculator;
 
 
 
@@ -29,6 +30,7 @@ public class Poker {
         for (int i = 0; i < numPlayers; i++) {
             players[i] = new Player("p"+i, startingStack);
         }
+        handCalculator = new HandCalculator(players);
     }
 
 
@@ -46,7 +48,7 @@ public class Poker {
         dealRiver();
         winningPlayer = action();
         doesGameContinue(winningPlayer);
-        winningPlayer = HandCalculator.calculateWinner(players, board);
+        winningPlayer = handCalculator.calculateWinner(board);
         System.out.println(winningPlayer);
 
     }
@@ -147,6 +149,7 @@ public class Poker {
         deck.pop(); // burn card
         board.add(deck.pop());
         printBoard();
+
     }
 
 
