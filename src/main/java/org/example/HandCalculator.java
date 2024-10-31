@@ -20,40 +20,50 @@ public class HandCalculator {
         for (Player player : players) {
             combined.addAll(player.getHand().getCards()); // combine hand and board cards
             combined.addAll(board.getCards());
+            System.out.println("Player and Board: " + combined);
             sortByValue();
-            if (isRoyalFlush()) {
-                return player; // this player is the winner, does not account for ties yet
+            if (hasRoyalFlush()) {
+                player.setHandValue(Player.HandValue.ROYAL_FLUSH);
+                player.setHighCard(getHighCardInHand(combined));
             } else if (hasStraightFlush()) {
                 player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
+                player.setHighCard(getHighCardInHand(combined));
             } else if (hasFourOfAKind()) {
                 player.setHandValue(Player.HandValue.FOUR_OF_A_KIND);
+                player.setHighCard(getHighCardInHand(combined));
             } else if (hasFullHouse()) {
                 player.setHandValue(Player.HandValue.FULL_HOUSE);
+                player.setHighCard(getHighCardInHand(combined));
             } else if (hasFlush()) {
                 player.setHandValue(Player.HandValue.FLUSH);
+                player.setHighCard(getHighCardInHand(combined));
             } else if (hasStraight(combined)) { // we use hasStraight to calculate a straight flush as well, so we have to do some shenanigans
                 player.setHandValue(Player.HandValue.STRAIGHT);
+                player.setHighCard(getHighCardInHand(combined));
             } else if (hasThreeOfAKind()) {
                 player.setHandValue(Player.HandValue.THREE_OF_A_KIND);
+                player.setHighCard(getHighCardInHand(combined));
             } else if (hasTwoPair()) {
                 player.setHandValue(Player.HandValue.TWO_PAIR);
+                player.setHighCard(getHighCardInHand(combined));
             }else if (hasTwoOfAKind()) {
                 player.setHandValue(Player.HandValue.PAIR);
+                player.setHighCard(getHighCardInHand(combined));
             } else {
                 player.setHandValue(Player.HandValue.HIGH_CARD);
+                player.setHighCard(combined.getLast());
             }
+
             
         }
         return null; //No player won?? should never reach here
     }
 
-    
-
     private void sortByValue() {
         combined.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal())); // sorts the cards by face value, lowest to highest
     }
 
-    private boolean isRoyalFlush() {
+    private boolean hasRoyalFlush() {
 
         // Check for each suit if it contains the royal flush
         for (Card.Suit suit : Card.Suit.values()) {
@@ -129,11 +139,20 @@ public class HandCalculator {
         return hasSameValue(3);
     }
     private boolean hasTwoPair() {
-        return false;
+        return countPairs() == 2;
     }
     private boolean hasTwoOfAKind() {
         return hasSameValue(2);
     }
+    private Card getHighCardInHand(List<Card> hand) {
+
+        // Sort by face value in descending order to get the highest card first
+        hand.sort((card1, card2) -> card2.getFaceValue().ordinal() - card1.getFaceValue().ordinal());
+
+        return hand.getFirst(); // Return the highest card
+    }
+
+
     /*
         hasSameValue function gets the number of cards it wants to look for then checks if the set of those cards are in the hand
         example:
