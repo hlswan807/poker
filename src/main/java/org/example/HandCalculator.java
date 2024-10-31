@@ -10,7 +10,7 @@ import java.util.*;
 public class HandCalculator {
     private List<Card> combined = new LinkedList<>();
     private Player[] players;
-    private Board board;
+
 
     public HandCalculator(Player[] p) {
         players = p;
@@ -31,7 +31,7 @@ public class HandCalculator {
                 player.setHandValue(Player.HandValue.FULL_HOUSE);
             } else if (hasFlush()) {
                 player.setHandValue(Player.HandValue.FLUSH);
-            } else if (hasStraight()) {
+            } else if (hasStraight(combined)) { // we use hasStraight to calculate a straight flush as well, so we have to do some shenanigans
                 player.setHandValue(Player.HandValue.STRAIGHT);
             } else if (hasThreeOfAKind()) {
                 player.setHandValue(Player.HandValue.THREE_OF_A_KIND);
@@ -85,20 +85,7 @@ public class HandCalculator {
             suitedCards.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal()));
 
             // Check for a straight within the suited cards
-            int consecutiveCount = 1;
-            for (int i = 1; i < suitedCards.size(); i++) {
-                int prevOrdinal = suitedCards.get(i - 1).getFaceValue().ordinal();
-                int currOrdinal = suitedCards.get(i).getFaceValue().ordinal();
-
-                if (currOrdinal == prevOrdinal + 1) {
-                    consecutiveCount++;
-                    if (consecutiveCount == 5) {
-                        return true; // Found a straight flush
-                    }
-                } else if (currOrdinal != prevOrdinal) {
-                    consecutiveCount = 1; // Reset count if not consecutive
-                }
-            }
+            return hasStraight(suitedCards);
         }
         return false; // No straight flush found
     }
@@ -116,7 +103,20 @@ public class HandCalculator {
     /*
         hasStraight gets the ordered hand and starts a count with the value of the cards
      */
-    private boolean hasStraight() {
+
+    private boolean hasStraight(List<Card> cards) {
+        int consecutiveCount = 1;
+        for (int i = 1; i < cards.size(); i++) {
+            int prevOrdinal = cards.get(i - 1).getFaceValue().ordinal();
+            int currOrdinal = cards.get(i).getFaceValue().ordinal();
+
+            if (currOrdinal == prevOrdinal + 1) {
+                consecutiveCount++;
+                if (consecutiveCount == 5) return true;
+            } else if (currOrdinal != prevOrdinal) {
+                consecutiveCount = 1;
+            }
+        }
         return false;
     }
     private boolean hasFourOfAKind() {
