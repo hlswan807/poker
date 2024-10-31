@@ -13,8 +13,12 @@ public class Player {
     enum Position {
         UTG, UTGPlus1, UTGPlus2, LG, HJ, CO, BTN, SB, BB,
     }
+    enum HandValue {
+        ROYAL_FLUSH, STRAIGHT_FLUSH, FOUR_OF_A_KIND, FULL_HOUSE, FLUSH, STRAIGHT, THREE_OF_A_KIND, TWO_PAIR, PAIR, HIGH_CARD
+    }
+    private Card highCard;
     private Position position;
-
+    private HandValue handValue;
     public Player(String name, int startingStack) {
         stack = startingStack;
         this.name = name;

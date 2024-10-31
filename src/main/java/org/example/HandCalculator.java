@@ -17,7 +17,10 @@ public class HandCalculator {
             sortByValue();
             if (isRoyalFlush()) {
                 return player;
+            } else if (hasStraightFlush()) {
+                player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
             }
+
         }
         return null; //No player won?? should never reach here
     }
@@ -43,9 +46,39 @@ public class HandCalculator {
         return false; // No royal flush found
     }
 
-    private static boolean isStraightFlush() {
-        return hasFlush() && hasStraight();
+    private static boolean hasStraightFlush() {
+        // Group cards by suit
+        Map<Card.Suit, List<Card>> suitToCards = new HashMap<>();
+        for (Card card : combined) {
+            suitToCards
+                    .computeIfAbsent(card.getSuit(), k -> new ArrayList<>())
+                    .add(card);
+        }
+
+        // Check for a straight in each suit
+        for (List<Card> suitedCards : suitToCards.values()) {
+            // Sort suited cards by face value
+            suitedCards.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal()));
+
+            // Check for a straight within the suited cards
+            int consecutiveCount = 1;
+            for (int i = 1; i < suitedCards.size(); i++) {
+                int prevOrdinal = suitedCards.get(i - 1).getFaceValue().ordinal();
+                int currOrdinal = suitedCards.get(i).getFaceValue().ordinal();
+
+                if (currOrdinal == prevOrdinal + 1) {
+                    consecutiveCount++;
+                    if (consecutiveCount == 5) {
+                        return true; // Found a straight flush
+                    }
+                } else if (currOrdinal != prevOrdinal) {
+                    consecutiveCount = 1; // Reset count if not consecutive
+                }
+            }
+        }
+        return false; // No straight flush found
     }
+
     /*
         hasFlush runs through each suit and counts the number of each suit. If any are over 5, that is a flush
     */
@@ -56,7 +89,9 @@ public class HandCalculator {
         }
         return false;
     }
-
+    /*
+        hasStraight gets the ordered hand and starts a count with the value of the cards
+     */
     private static boolean hasStraight() {
         return false;
     }
