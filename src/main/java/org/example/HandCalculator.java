@@ -46,8 +46,14 @@ public class HandCalculator {
     private static boolean isStraightFlush() {
         return hasFlush() && hasStraight();
     }
-
+    /*
+        hasFlush runs through each suit and counts the number of each suit. If any are over 5, that is a flush
+    */
     private static boolean hasFlush() {
+        for (Card.Suit suit : Card.Suit.values()) {
+            long suitCount = combined.stream().filter(card -> card.getSuit() == suit).count();
+            if (suitCount >= 5) return true;
+        }
         return false;
     }
 
