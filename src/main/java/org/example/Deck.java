@@ -20,7 +20,7 @@ public class Deck {
     }
     public void shuffle() {
         Collections.shuffle(cards);
-    }
+    } // Collections not valid for AP Exam
 
     public Card pop() {
         return cards.removeFirst();
