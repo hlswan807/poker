@@ -1,5 +1,8 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -48,8 +51,8 @@ public class Poker {
         dealRiver();
         winningPlayer = action();
         doesGameContinue(winningPlayer);
-        winningPlayer = handCalculator.calculateWinner(board);
-        System.out.println(winningPlayer);
+        List<Player> winningPlayers = handCalculator.calculateWinner(board);
+        System.out.println(winningPlayers.toString());
 
     }
 

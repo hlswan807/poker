@@ -10,14 +10,17 @@ import java.util.*;
 public class HandCalculator {
     private List<Card> combined = new LinkedList<>();
     private Player[] players;
+    private Player.HandValue bestRank = Player.HandValue.HIGH_CARD;
+    private Player player;
+
 
 
     public HandCalculator(Player[] p) {
         players = p;
     }
 
-    public Player calculateWinner(Board board) {
-        Player winningPlayer = null;
+    public List<Player> calculateWinner(Board board) {
+        List<Player> winningPlayers = new ArrayList<>();
         for (Player player : players) {
             combined.addAll(player.getHand().getCards()); // combine hand and board cards
             combined.addAll(board.getCards());
@@ -27,7 +30,6 @@ public class HandCalculator {
                 player.setHandValue(Player.HandValue.ROYAL_FLUSH);
                 player.setHighCard(getHighCardInHand(combined));
                 System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-                winningPlayer = player;
             } else if (hasStraightFlush()) {
                 player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
                 player.setHighCard(getHighCardInHand(combined));
@@ -67,31 +69,40 @@ public class HandCalculator {
             }
             combined.clear();
         }
+        System.out.println("Calculating who won...");
         for (Player player : players) {
-            if (winningPlayer != null && player.getHandValue().equals(Player.HandValue.ROYAL_FLUSH)) {
-                winningPlayer = player;
-            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.STRAIGHT_FLUSH))) {
-                winningPlayer = player;
-            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.FOUR_OF_A_KIND))) {
-                winningPlayer = player;
-            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.FULL_HOUSE))) {
-                winningPlayer = player;
-            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.FLUSH))) {
-                winningPlayer = player;
-            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.STRAIGHT))) {
-                winningPlayer = player;
-            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.THREE_OF_A_KIND))) {
-                winningPlayer = player;
-            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.TWO_PAIR))) {
-                winningPlayer = player;
-            }  else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.PAIR))) {
-                winningPlayer = player;
-            }  else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.HIGH_CARD))) {
-                winningPlayer = player;
+            if (playerRankIsHigherThan(bestRank, player)) {
+
             }
         }
 
-        return winningPlayer;
+        return winningPlayers;
+    }
+
+    private boolean playerRankIsHigherThan(Player.HandValue bestRank, Player player) {
+        if (bestRank == Player.HandValue.HIGH_CARD && player.getHandValueAsInt() > 0) {
+            return true;
+        } else if (bestRank == Player.HandValue.PAIR && player.getHandValueAsInt() > 1) {
+            return true;
+        } else if (bestRank == Player.HandValue.TWO_PAIR && player.getHandValueAsInt() > 2) {
+            return true;
+        } else if (bestRank == Player.HandValue.THREE_OF_A_KIND && player.getHandValueAsInt() > 3) {
+            return true;
+        } else if (bestRank == Player.HandValue.STRAIGHT && player.getHandValueAsInt() > 4) {
+            return true;
+        } else if (bestRank == Player.HandValue.FLUSH && player.getHandValueAsInt() > 5) {
+            return true;
+        } else if (bestRank == Player.HandValue.FULL_HOUSE && player.getHandValueAsInt() > 6) {
+            return true;
+        } else if (bestRank == Player.HandValue.FOUR_OF_A_KIND && player.getHandValueAsInt() > 7) {
+            return true;
+        } else if (bestRank == Player.HandValue.STRAIGHT_FLUSH && player.getHandValueAsInt() > 8) {
+            return true;
+        } else if (bestRank == Player.HandValue.ROYAL_FLUSH && player.getHandValueAsInt() >= 9) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void sortByValue() {
