@@ -22,57 +22,75 @@ public class HandCalculator {
     public List<Player> calculateWinner(Board board) {
         List<Player> winningPlayers = new ArrayList<>();
         for (Player player : players) {
-            combined.addAll(player.getHand().getCards()); // combine hand and board cards
-            combined.addAll(board.getCards());
-            System.out.println("Player and Board: " + combined);
-            sortByValue();
-            if (hasRoyalFlush()) {
-                player.setHandValue(Player.HandValue.ROYAL_FLUSH);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            } else if (hasStraightFlush()) {
-                player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            } else if (hasFourOfAKind()) {
-                player.setHandValue(Player.HandValue.FOUR_OF_A_KIND);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            } else if (hasFullHouse()) {
-                player.setHandValue(Player.HandValue.FULL_HOUSE);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            } else if (hasFlush()) {
-                player.setHandValue(Player.HandValue.FLUSH);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            } else if (hasStraight(combined)) { // we use hasStraight to calculate a straight flush as well, so we have to do some shenanigans
-                player.setHandValue(Player.HandValue.STRAIGHT);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            } else if (hasThreeOfAKind()) {
-                player.setHandValue(Player.HandValue.THREE_OF_A_KIND);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            } else if (hasTwoPair()) {
-                player.setHandValue(Player.HandValue.TWO_PAIR);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            }else if (hasTwoOfAKind()) {
-                player.setHandValue(Player.HandValue.PAIR);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-            } else {
-                player.setHandValue(Player.HandValue.HIGH_CARD);
-                player.setHighCard(getHighCardInHand(combined));
-                System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+            if (!player.isFolded()) {
+
+
+                combined.addAll(player.getHand().getCards()); // combine hand and board cards
+                combined.addAll(board.getCards());
+                System.out.println("Player and Board: " + combined);
+                sortByValue();
+                if (hasRoyalFlush()) {
+                    player.setHandValue(Player.HandValue.ROYAL_FLUSH);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.ROYAL_FLUSH;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else if (hasStraightFlush()) {
+                    player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.STRAIGHT_FLUSH;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else if (hasFourOfAKind()) {
+                    player.setHandValue(Player.HandValue.FOUR_OF_A_KIND);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.FOUR_OF_A_KIND;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else if (hasFullHouse()) {
+                    player.setHandValue(Player.HandValue.FULL_HOUSE);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.FULL_HOUSE;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else if (hasFlush()) {
+                    player.setHandValue(Player.HandValue.FLUSH);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.FLUSH;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else if (hasStraight(combined)) { // we use hasStraight to calculate a straight flush as well, so we have to do some shenanigans
+                    player.setHandValue(Player.HandValue.STRAIGHT);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.STRAIGHT;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else if (hasThreeOfAKind()) {
+                    player.setHandValue(Player.HandValue.THREE_OF_A_KIND);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.THREE_OF_A_KIND;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else if (hasTwoPair()) {
+                    player.setHandValue(Player.HandValue.TWO_PAIR);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.TWO_PAIR;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else if (hasTwoOfAKind()) {
+                    player.setHandValue(Player.HandValue.PAIR);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.PAIR;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                } else {
+                    player.setHandValue(Player.HandValue.HIGH_CARD);
+                    player.setHighCard(getHighCardInHand(combined));
+                    bestRank = Player.HandValue.HIGH_CARD;
+                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                }
             }
             combined.clear();
         }
         System.out.println("Calculating who won...");
-        for (Player player : players) {
-            if (playerRankIsHigherThan(bestRank, player)) {
 
+        for (Player player : players) {
+            if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
+                System.out.println(player.getName() + player.getHand().toWinningString());
+                winningPlayers.add(player);
+            } else {
+                System.out.println("Players hands are the same, calculating high card.");
             }
         }
 
@@ -98,7 +116,7 @@ public class HandCalculator {
             return true;
         } else if (bestRank == Player.HandValue.STRAIGHT_FLUSH && player.getHandValueAsInt() > 8) {
             return true;
-        } else if (bestRank == Player.HandValue.ROYAL_FLUSH && player.getHandValueAsInt() >= 9) {
+        } else if (bestRank == Player.HandValue.ROYAL_FLUSH && player.getHandValueAsInt() > 9) {
             return true;
         } else {
             return false;
