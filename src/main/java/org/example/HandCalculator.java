@@ -68,12 +68,29 @@ public class HandCalculator {
             combined.clear();
         }
         for (Player player : players) {
-            if (player.getHandValue().equals(Player.HandValue.ROYAL_FLUSH)) {
+            if (winningPlayer != null && player.getHandValue().equals(Player.HandValue.ROYAL_FLUSH)) {
                 winningPlayer = player;
             } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.STRAIGHT_FLUSH))) {
                 winningPlayer = player;
+            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.FOUR_OF_A_KIND))) {
+                winningPlayer = player;
+            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.FULL_HOUSE))) {
+                winningPlayer = player;
+            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.FLUSH))) {
+                winningPlayer = player;
+            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.STRAIGHT))) {
+                winningPlayer = player;
+            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.THREE_OF_A_KIND))) {
+                winningPlayer = player;
+            } else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.TWO_PAIR))) {
+                winningPlayer = player;
+            }  else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.PAIR))) {
+                winningPlayer = player;
+            }  else if (winningPlayer != null && (player.getHandValue().equals(Player.HandValue.HIGH_CARD))) {
+                winningPlayer = player;
             }
         }
+
         return winningPlayer;
     }
 
