@@ -9,9 +9,11 @@ import java.util.*;
 @Getter
 public class HandCalculator {
     private List<Card> combined = new LinkedList<>();
+    private List<Card> best_5_cards = new LinkedList<>();
     private Player[] players;
     private Player.HandValue bestRank = Player.HandValue.HIGH_CARD;
     private Player player;
+
 
 
 
@@ -87,10 +89,11 @@ public class HandCalculator {
 
         for (Player player : players) {
             if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
-                System.out.println(player.getName() + player.getHand().toWinningString());
+                System.out.println(player.getName() + player.getHand());
                 winningPlayers.add(player);
             } else {
                 System.out.println("Players hands are the same, calculating high card.");
+
             }
         }
 
@@ -138,6 +141,12 @@ public class HandCalculator {
             boolean hasTen = combined.contains(new Card(suit, Card.FaceValue.Ten));
 
             if (hasAce && hasKing && hasQueen && hasJack && hasTen) {
+                // add the best 5 cards in the hand for calculating high card
+                best_5_cards.add(new Card(suit, Card.FaceValue.Ace));
+                best_5_cards.add(new Card(suit, Card.FaceValue.King));
+                best_5_cards.add(new Card(suit, Card.FaceValue.Queen));
+                best_5_cards.add(new Card(suit, Card.FaceValue.Jack));
+                best_5_cards.add(new Card(suit, Card.FaceValue.Ten));
                 return true; // Found a royal flush
             }
         }
@@ -159,6 +168,7 @@ public class HandCalculator {
             suitedCards.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal()));
 
             // Check for a straight within the suited cards
+
             return hasStraight(suitedCards);
         }
         return false; // No straight flush found
@@ -170,7 +180,11 @@ public class HandCalculator {
     private boolean hasFlush() {
         for (Card.Suit suit : Card.Suit.values()) {
             long suitCount = combined.stream().filter(card -> card.getSuit() == suit).count();
-            if (suitCount >= 5) return true;
+
+            if (suitCount >= 5) {
+
+                return true;
+            }
         }
         return false;
     }
