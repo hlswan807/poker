@@ -279,6 +279,7 @@ public class HandCalculator {
             if (entry.getValue().size() == count) {
                 // Add the cards with the matching face value to the best_5_cards
                 best_5_cards.addAll(entry.getValue());
+                System.out.println("Best 5 cards ran from hasSameValue " + best_5_cards);
                 return true;
             }
         }
