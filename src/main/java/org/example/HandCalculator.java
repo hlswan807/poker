@@ -9,7 +9,8 @@ import java.util.*;
 @Getter
 public class HandCalculator {
     private List<Card> combined = new LinkedList<>();
-    private List<Card> best_5_cards = new LinkedList<>();
+    private List<Card> bestFiveCards = new LinkedList<>();
+    private List<Card> bestSet = new LinkedList<>();
     private Player[] players;
     private Player.HandValue bestRank = Player.HandValue.HIGH_CARD;
     private Player player;
@@ -149,11 +150,11 @@ public class HandCalculator {
 
             if (hasAce && hasKing && hasQueen && hasJack && hasTen) {
                 // add the best 5 cards in the hand for calculating high card
-                best_5_cards.add(new Card(suit, Card.FaceValue.Ace));
-                best_5_cards.add(new Card(suit, Card.FaceValue.King));
-                best_5_cards.add(new Card(suit, Card.FaceValue.Queen));
-                best_5_cards.add(new Card(suit, Card.FaceValue.Jack));
-                best_5_cards.add(new Card(suit, Card.FaceValue.Ten));
+                bestFiveCards.add(new Card(suit, Card.FaceValue.Ace));
+                bestFiveCards.add(new Card(suit, Card.FaceValue.King));
+                bestFiveCards.add(new Card(suit, Card.FaceValue.Queen));
+                bestFiveCards.add(new Card(suit, Card.FaceValue.Jack));
+                bestFiveCards.add(new Card(suit, Card.FaceValue.Ten));
                 return true; // Found a royal flush
             }
         }
@@ -195,13 +196,13 @@ public class HandCalculator {
             List<Card> cardsOfSuit = suitToCards.get(suit);
             if (cardsOfSuit != null && cardsOfSuit.size() >= 5) {
                 List<Card> sortedCards = sortListByValue(cardsOfSuit);
-                best_5_cards.add(sortedCards.removeFirst());
-                best_5_cards.add(sortedCards.removeFirst());
-                best_5_cards.add(sortedCards.removeFirst());
-                best_5_cards.add(sortedCards.removeFirst());
-                best_5_cards.add(sortedCards.removeFirst());
-                System.out.println(best_5_cards);
-                if (best_5_cards.size() > 5) {
+                bestFiveCards.add(sortedCards.removeFirst());
+                bestFiveCards.add(sortedCards.removeFirst());
+                bestFiveCards.add(sortedCards.removeFirst());
+                bestFiveCards.add(sortedCards.removeFirst());
+                bestFiveCards.add(sortedCards.removeFirst());
+                System.out.println(bestFiveCards);
+                if (bestFiveCards.size() > 5) {
                     System.out.println("best_5 cards is larger than 5, something went very wrong");
                 }
                 return true;
@@ -222,10 +223,10 @@ public class HandCalculator {
 
 
             if (currOrdinal == prevOrdinal + 1) {
-                best_5_cards.add(cards.get(i));
+                bestFiveCards.add(cards.get(i));
                 consecutiveCount++;
                 if (consecutiveCount == 5) {
-                    System.out.println(best_5_cards);
+                    System.out.println(bestFiveCards);
                     return true;
                 }
             } else if (currOrdinal != prevOrdinal) {
@@ -278,8 +279,8 @@ public class HandCalculator {
         for (Map.Entry<Card.FaceValue, List<Card>> entry : faceValueToCards.entrySet()) {
             if (entry.getValue().size() == count) {
                 // Add the cards with the matching face value to the best_5_cards
-                best_5_cards.addAll(entry.getValue());
-                System.out.println("Best 5 cards ran from hasSameValue " + best_5_cards);
+                bestSet.addAll(entry.getValue());
+                System.out.println("Best 5 cards ran from hasSameValue " + bestSet);
                 return true;
             }
         }
