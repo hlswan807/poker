@@ -22,11 +22,9 @@ public class HandCalculator {
     }
 
     public List<Player> calculateWinner(Board board) {
-        List<Player> winningPlayers = new ArrayList<>();
+        List<Player> potentialWinners = new ArrayList<>();
         for (Player player : players) {
             if (!player.isFolded()) {
-
-
                 combined.addAll(player.getHand().getCards()); // combine hand and board cards
                 combined.addAll(board.getCards());
                 System.out.println("Player and Board: " + combined);
@@ -90,14 +88,18 @@ public class HandCalculator {
         for (Player player : players) {
             if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
                 System.out.println(player.getName() + player.getHand());
-                winningPlayers.add(player);
+                potentialWinners.add(player);
             } else {
                 System.out.println("Players hands are the same, calculating high card.");
 
             }
         }
 
-        return winningPlayers;
+        return potentialWinners;
+    }
+
+    private Player.HandValue evaluateHand(Hand hand, Board board) {
+        return Player.HandValue.HIGH_CARD;
     }
 
     private boolean playerRankIsHigherThan(Player.HandValue bestRank, Player player) {
@@ -128,6 +130,11 @@ public class HandCalculator {
 
     private void sortByValue() {
         combined.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal())); // sorts the cards by face value, lowest to highest
+    }
+
+    private List<Card> sortListByValue(List<Card> cards) {
+        cards.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal()));
+        return cards;
     }
 
     private boolean hasRoyalFlush() {
@@ -168,8 +175,8 @@ public class HandCalculator {
             suitedCards.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal()));
 
             // Check for a straight within the suited cards
-
             return hasStraight(suitedCards);
+
         }
         return false; // No straight flush found
     }
@@ -178,16 +185,31 @@ public class HandCalculator {
         hasFlush runs through each suit and counts the number of each suit. If any are over 5, that is a flush
     */
     private boolean hasFlush() {
+        Map<Card.Suit, List<Card>> suitToCards = new HashMap<>();
+        for (Card card : combined) {
+            suitToCards
+                    .computeIfAbsent(card.getSuit(), k -> new ArrayList<>()).add(card);
+        }
+
         for (Card.Suit suit : Card.Suit.values()) {
-            long suitCount = combined.stream().filter(card -> card.getSuit() == suit).count();
-
-            if (suitCount >= 5) {
-
+            List<Card> cardsOfSuit = suitToCards.get(suit);
+            if (cardsOfSuit != null && cardsOfSuit.size() >= 5) {
+                List<Card> sortedCards = sortListByValue(cardsOfSuit);
+                best_5_cards.add(sortedCards.removeFirst());
+                best_5_cards.add(sortedCards.removeFirst());
+                best_5_cards.add(sortedCards.removeFirst());
+                best_5_cards.add(sortedCards.removeFirst());
+                best_5_cards.add(sortedCards.removeFirst());
+                System.out.println(best_5_cards);
+                if (best_5_cards.size() > 5) {
+                    System.out.println("best_5 cards is larger than 5, something went very wrong");
+                }
                 return true;
             }
         }
         return false;
     }
+
     /*
         hasStraight gets the ordered hand and starts a count with the value of the cards
      */
@@ -198,9 +220,14 @@ public class HandCalculator {
             int prevOrdinal = cards.get(i - 1).getFaceValue().ordinal();
             int currOrdinal = cards.get(i).getFaceValue().ordinal();
 
+
             if (currOrdinal == prevOrdinal + 1) {
+                best_5_cards.add(cards.get(i));
                 consecutiveCount++;
-                if (consecutiveCount == 5) return true;
+                if (consecutiveCount == 5) {
+                    System.out.println(best_5_cards);
+                    return true;
+                }
             } else if (currOrdinal != prevOrdinal) {
                 consecutiveCount = 1;
             }

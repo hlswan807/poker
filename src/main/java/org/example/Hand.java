@@ -10,9 +10,6 @@ public class Hand {
     public String toString() {
         return "Your hand is the " + cards.toString();
     }
-    public String toWinningString() {
-        return " won with the hand: " + cards.toString();
-    }
 
     public List<Card> getCards() {
         return cards;
