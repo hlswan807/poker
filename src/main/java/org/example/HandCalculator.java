@@ -265,13 +265,26 @@ public class HandCalculator {
         checks if there are a pair of any two cards in the hand.
      */
     private boolean hasSameValue(int count) {
-        Map<Card.FaceValue, Integer> faceCount = new HashMap<>();
+        Map<Card.FaceValue, List<Card>> faceValueToCards = new HashMap<>();
 
+        // Populate the map with face values and their corresponding cards
         for (Card card : combined) {
-            faceCount.put(card.getFaceValue(), faceCount.getOrDefault(card.getFaceValue(), 0) + 1);
+            faceValueToCards
+                    .computeIfAbsent(card.getFaceValue(), k -> new ArrayList<>())
+                    .add(card);
         }
-        return faceCount.containsValue(count);
+
+        // Check if any face value has the required count
+        for (Map.Entry<Card.FaceValue, List<Card>> entry : faceValueToCards.entrySet()) {
+            if (entry.getValue().size() == count) {
+                // Add the cards with the matching face value to the best_5_cards
+                best_5_cards.addAll(entry.getValue());
+                return true;
+            }
+        }
+        return false;
     }
+
     private int countPairs() {
         Map<Card.FaceValue, Integer> faceCount = new HashMap<>(); //maps the face value as the key and the integer as the value
 
