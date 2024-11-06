@@ -52,7 +52,7 @@ public class Poker {
         winningPlayer = action();
         doesGameContinue(winningPlayer);
         List<Player> winningPlayers = handCalculator.calculateWinner(board);
-        System.out.println(winningPlayers.toString());
+        System.out.println(winningPlayers.getFirst().getName());
 
     }
 
