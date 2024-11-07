@@ -10,7 +10,7 @@ import java.util.*;
 public class HandCalculator {
     private List<Card> combined = new LinkedList<>();
     private List<Card> bestFiveCards = new LinkedList<>();
-    private List<Card> bestSet = new LinkedList<>();
+    private List<Card> sets = new LinkedList<>();
     private Player[] players;
     private Player.HandValue bestRank = Player.HandValue.HIGH_CARD;
     private Player player;
@@ -279,8 +279,8 @@ public class HandCalculator {
         for (Map.Entry<Card.FaceValue, List<Card>> entry : faceValueToCards.entrySet()) {
             if (entry.getValue().size() == count) {
                 // Add the cards with the matching face value to the best_5_cards
-                bestSet.addAll(entry.getValue());
-                System.out.println("Best 5 cards ran from hasSameValue " + bestSet);
+                sets.addAll(entry.getValue());
+                System.out.println("Best 5 cards ran from hasSameValue " + sets);
                 return true;
             }
         }
