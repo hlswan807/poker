@@ -36,7 +36,7 @@ public class HandCalculator {
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else if (hasStraightFlush()) {
                     player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
-                    player.setHighCard(getHighCardInBestFiveCards(combined));
+                    player.setHighCard(getHighCardInHand(combined));
                     bestRank = Player.HandValue.STRAIGHT_FLUSH;
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else if (hasFourOfAKind()) {
@@ -47,17 +47,17 @@ public class HandCalculator {
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else if (hasFullHouse()) {
                     player.setHandValue(Player.HandValue.FULL_HOUSE);
-                    player.setHighCard(getHighCardInBestFiveCards(combined));
+                    player.setHighCard(getHighCardInHand(combined));
                     bestRank = Player.HandValue.FULL_HOUSE;
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else if (hasFlush()) {
                     player.setHandValue(Player.HandValue.FLUSH);
-                    player.setHighCard(getHighCardInBestFiveCards(combined));
+                    player.setHighCard(getHighCardInHand(combined));
                     bestRank = Player.HandValue.FLUSH;
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else if (hasStraight(combined)) { // we use hasStraight to calculate a straight flush as well, so we have to do some shenanigans
                     player.setHandValue(Player.HandValue.STRAIGHT);
-                    player.setHighCard(getHighCardInBestFiveCards(combined));
+                    player.setHighCard(getHighCardInHand(combined));
                     bestRank = Player.HandValue.STRAIGHT;
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else if (hasThreeOfAKind()) {
@@ -100,10 +100,6 @@ public class HandCalculator {
         }
 
         return potentialWinners;
-    }
-
-    private Player.HandValue evaluateHand(Hand hand, Board board) {
-        return Player.HandValue.HIGH_CARD;
     }
 
     private boolean playerRankIsHigherThan(Player.HandValue bestRank, Player player) {
@@ -262,9 +258,7 @@ public class HandCalculator {
     private Card getHighestPair(List<Card> hand) {
         return hand.getFirst();
     }
-    private Card getHighCardInBestFiveCards(List<Card> hand) {
-        return hand.getFirst();
-    }
+    
     private Card getHighCardInHand(List<Card> hand) {
 
         // Sort by face value in descending order to get the highest card first
