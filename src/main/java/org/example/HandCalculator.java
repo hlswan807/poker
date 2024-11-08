@@ -166,7 +166,7 @@ public class HandCalculator {
         Map<Card.Suit, List<Card>> suitToCards = new HashMap<>();
         for (Card card : combined) {
             suitToCards
-                    .computeIfAbsent(card.getSuit(), k -> new ArrayList<>())
+                    .computeIfAbsent(card.getSuit(), _ -> new ArrayList<>())
                     .add(card);
         }
 
@@ -189,7 +189,7 @@ public class HandCalculator {
         Map<Card.Suit, List<Card>> suitToCards = new HashMap<>();
         for (Card card : combined) {
             suitToCards
-                    .computeIfAbsent(card.getSuit(), k -> new ArrayList<>()).add(card);
+                    .computeIfAbsent(card.getSuit(), _ -> new ArrayList<>()).add(card);
         }
 
         for (Card.Suit suit : Card.Suit.values()) {
@@ -271,7 +271,7 @@ public class HandCalculator {
         // Populate the map with face values and their corresponding cards
         for (Card card : combined) {
             faceValueToCards
-                    .computeIfAbsent(card.getFaceValue(), k -> new ArrayList<>())
+                    .computeIfAbsent(card.getFaceValue(), _ -> new ArrayList<>())
                     .add(card);
         }
 

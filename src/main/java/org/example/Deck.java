@@ -26,6 +26,16 @@ public class Deck {
         return cards.removeFirst();
     }
 
+    public Card popSpecificCard(Card.Suit suit, Card.FaceValue faceValue) {
+        for (Card card : cards) {
+            if (card.getSuit() == suit && card.getFaceValue() == faceValue) { //look for the card
+                cards.remove(card); //found the card -> remove it from the deck and return it
+                return card;
+            }
+        }
+        return null;
+    }
+
     public String toString() {
         StringBuilder output = new StringBuilder();
         for (Card card : cards) {
@@ -33,4 +43,5 @@ public class Deck {
         }
         return output.toString();
     }
+
 }

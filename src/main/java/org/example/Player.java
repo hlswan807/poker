@@ -18,6 +18,8 @@ public class Player {
     private boolean isFolded = false;
     @Getter @Setter
     private int handValueAsInt = 0;
+
+
     @Getter
     enum Position {
         UTG, UTGPlus1, UTGPlus2, LG, HJ, CO, BTN, SB, BB,
@@ -78,6 +80,10 @@ public class Player {
     public void addCard(Card card) {
         hand.add(card);
         //System.out.println(name + " is dealt " + card.toString()); // for debug
+    }
+
+    public void addHand(Hand hand) {
+        this.hand.addAll(hand.getCards());
     }
 
     public void addChips(int chips) {
