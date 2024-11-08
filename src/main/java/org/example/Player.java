@@ -31,6 +31,8 @@ public class Player {
     @Getter @Setter
     private Card highCard;
     @Getter @Setter
+    private Card kicker;
+    @Getter @Setter
     private Position position;
 
     public Player(String name, int startingStack) {
