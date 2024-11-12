@@ -17,8 +17,6 @@ public class Main {
             poker.debug_game();
             playAgain();
         }
-
-
     }
 
     private static void playAgain() {

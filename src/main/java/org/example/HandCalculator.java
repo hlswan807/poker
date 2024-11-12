@@ -95,7 +95,6 @@ public class HandCalculator {
                 potentialWinners.add(player);
             } else {
                 System.out.println("Players hands are the same, calculating high card.");
-
             }
         }
 
@@ -270,7 +269,7 @@ public class HandCalculator {
 
         // Sort by face value in descending order to get the highest card first
         hand.sort((card1, card2) -> card2.getFaceValue().ordinal() - card1.getFaceValue().ordinal());
-
+        System.out.println("Getting kicker: " + hand.getFirst());
         return hand.getFirst(); // Return the highest card
     }
 
