@@ -48,7 +48,7 @@ public class Poker {
         dealSpecificHand(input.nextLine());
 
         List<Player> winningPlayers = handCalculator.calculateWinner(board);
-        System.out.println(winningPlayers.getFirst().getName());
+        System.out.println(winningPlayers.getFirst().getName() + " is the winner!");
     }
     public void dealSpecificHand(String hand) {
         nextPlayerNum = dealer;
@@ -103,6 +103,22 @@ public class Poker {
             players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Two));
             players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));// hc
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Jack));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Queen));
+            board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
+            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Four));
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));
+            for (Player player : players) {
+                System.out.println(player.getHand());
+            }
+            System.out.println(board);
+        } else if (hand.equalsIgnoreCase("h")) {
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.King));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Eight));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Jack));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Eight));// pairs
+            players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Two));
+            players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));// hc
+            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Seven));
             board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Queen));
             board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Four));

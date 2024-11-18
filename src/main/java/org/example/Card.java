@@ -26,6 +26,10 @@ public class Card {
         faceValue = v;
     }
 
+    public int toInt() {
+        return faceValue.ordinal() + 2;
+    }
+
     @Override
     public String toString() {
         return faceValue + " of " + suit;
