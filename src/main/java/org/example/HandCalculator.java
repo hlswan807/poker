@@ -106,7 +106,7 @@ public class HandCalculator {
             case SETS:
 
             case FIVE_CARD_HANDS:
-                System.out.print("Players hands are the same, calculating kicker.");
+                System.out.print("Calculating case FIVE_CARD_HANDS");
                 int highestKicker = 2;
                 for (Player player : players) {
                     if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
@@ -123,7 +123,7 @@ public class HandCalculator {
                 System.out.println();
                 potentialWinners.add(winner);
             case HIGH_CARDS:
-                System.out.print("Players hands are the same, calculating high card");
+                System.out.print("Calculating case HIGH_CARDS");
                 int high_card = 2;
                 for (Player player : players) {
                     System.out.print(".");

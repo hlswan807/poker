@@ -5,6 +5,14 @@ import lombok.Setter;
 
 
 public class Player {
+    @Getter @Setter
+    private Hand bestPair;
+    @Getter @Setter
+    private Hand pairTwo;
+    @Getter @Setter
+    private Hand threeOfAKind;
+    @Getter @Setter
+    private Hand quads;
     private HandValue handValue;
     @Getter @Setter
     private int stack;
