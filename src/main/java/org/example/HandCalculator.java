@@ -69,6 +69,11 @@ public class HandCalculator {
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else if (hasThreeOfAKind()) {
                     mode = HandCalculatorMode.SETS;
+                    player.setThreeOfAKindFromList(sets);
+                    System.out.println();
+                    System.out.println("Player has three of a kind " + player.getThreeOfAKind());
+                    System.out.println();
+                    System.out.println();
                     player.setHandValue(Player.HandValue.THREE_OF_A_KIND);
                     player.setHighCard(getHighestTrips(combined));
                     player.setKicker(getKicker(combined));
@@ -104,7 +109,31 @@ public class HandCalculator {
         Player winner = null;
         switch (mode) {
             case SETS:
+                System.out.print("Calculating case SETS");
+                int highest = 0;
+                for (Player player : players) {
+                    if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
+                        System.out.println(player.getName() + player.getHand());
+                        winner = player;
+                    } else {
+                        if (player.getQuads() != null) {
 
+                        } else if (player.getThreeOfAKind() != null) {
+
+                        } else if (player.getBestPair() != null && player.getPairTwo() != null) { // if the player has two pair
+
+                        } else {
+
+                        }
+
+                            highest = player.getThreeOfAKind().getFirstCard().toInt();
+                            winner = player;
+
+                    }
+                }
+                System.out.println();
+                potentialWinners.add(winner);
+                break;
             case FIVE_CARD_HANDS:
                 System.out.print("Calculating case FIVE_CARD_HANDS");
                 int highestKicker = 2;
@@ -122,6 +151,7 @@ public class HandCalculator {
                 }
                 System.out.println();
                 potentialWinners.add(winner);
+                break;
             case HIGH_CARDS:
                 System.out.print("Calculating case HIGH_CARDS");
                 int high_card = 2;
@@ -134,7 +164,9 @@ public class HandCalculator {
                 }
                 System.out.println();
                 potentialWinners.add(winner);
+                break;
             default:
+                break;
         }
 
         return potentialWinners;
@@ -334,7 +366,6 @@ public class HandCalculator {
             if (entry.getValue().size() == count) {
                 // Add the cards with the matching face value to the best_5_cards
                 sets.addAll(entry.getValue());
-                System.out.println("Best 5 cards ran from hasSameValue " + sets);
                 return true;
             }
         }

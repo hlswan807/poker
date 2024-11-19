@@ -20,6 +20,9 @@ public class Hand {
     public List<Card> getCards() {
         return cards;
     }
+    public Card getFirstCard() {
+        return cards.get(0);
+    }
 
     public void clear() {
         cards.clear();

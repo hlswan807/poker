@@ -3,28 +3,31 @@ package org.example;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 
+
+@Getter
 public class Player {
-    @Getter @Setter
-    private Hand bestPair;
-    @Getter @Setter
-    private Hand pairTwo;
-    @Getter @Setter
-    private Hand threeOfAKind;
-    @Getter @Setter
-    private Hand quads;
+    @Setter
+    private Hand bestPair = new Hand();;
+    @Setter
+    private Hand pairTwo = new Hand();;
+    @Setter
+    private Hand threeOfAKind = new Hand();
+    @Setter
+    private Hand quads = new Hand();;
     private HandValue handValue;
-    @Getter @Setter
+    @Setter
     private int stack;
-    @Getter @Setter
+    @Setter
     private Hand hand;
-    @Getter @Setter
+    @Setter
     private String name;
-    @Getter @Setter
+    @Setter
     private int currentBet;
-    @Getter @Setter
+    @Setter
     private boolean isFolded = false;
-    @Getter @Setter
+    @Setter
     private int handValueAsInt = 0;
 
 
@@ -36,11 +39,11 @@ public class Player {
     public enum HandValue {
         ROYAL_FLUSH, STRAIGHT_FLUSH, FOUR_OF_A_KIND, FULL_HOUSE, FLUSH, STRAIGHT, THREE_OF_A_KIND, TWO_PAIR, PAIR, HIGH_CARD
     }
-    @Getter @Setter
+    @Setter
     private Card highCard;
-    @Getter @Setter
+    @Setter
     private Card kicker;
-    @Getter @Setter
+    @Setter
     private Position position;
 
     public Player(String name, int startingStack) {
@@ -72,9 +75,12 @@ public class Player {
             setHandValueAsInt(9);
         }
     }
-    public HandValue getHandValue() {
-        return handValue;
+
+    public void setThreeOfAKindFromList(List<Card> cards) {
+        this.threeOfAKind.addAll(cards);
     }
+
+
 
     public void bet(int amount) {
         stack -= amount;

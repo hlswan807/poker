@@ -81,10 +81,8 @@ public class Poker {
         } else if (hand.equalsIgnoreCase("s")) {
             players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));
             players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Ace));// 4k
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Three));
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Eight));// 3k
-            players[2].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.King));
-            players[2].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Jack));// 2p
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.King));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Jack));// 2p
 
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Ace));
             board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Ace));
@@ -101,7 +99,9 @@ public class Poker {
             players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Jack));
             players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Eight));// pairs
             players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Two));
-            players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));// hc
+            players[2].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Ace));// hc
+            players[3].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Queen)); //3k
+            players[3].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Queen));
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Jack));
             board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Queen));
             board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
