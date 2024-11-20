@@ -23,15 +23,6 @@ public class Poker {
     Player[] players;
     HandCalculator handCalculator;
 
-    Hand fullHouseHand = new Hand(new Card(Card.Suit.Clubs, Card.FaceValue.Ten), new Card(Card.Suit.Diamonds, Card.FaceValue.Ten)); // fh
-    Hand flushHand = new Hand(new Card(Card.Suit.Hearts, Card.FaceValue.Two), new Card(Card.Suit.Hearts, Card.FaceValue.Seven)); // f
-    Hand straightHand = new Hand(new Card(Card.Suit.Spades, Card.FaceValue.Nine), new Card(Card.Suit.Spades, Card.FaceValue.Eight));// s
-    Hand fourOfAKindHand = new Hand(new Card(Card.Suit.Spades, Card.FaceValue.Nine), new Card(Card.Suit.Spades, Card.FaceValue.Eight));// s
-    Hand threeOfAKindHand = new Hand(new Card(Card.Suit.Spades, Card.FaceValue.Nine), new Card(Card.Suit.Spades, Card.FaceValue.Eight));// s
-    Hand twoPairHand = new Hand(new Card(Card.Suit.Spades, Card.FaceValue.Nine), new Card(Card.Suit.Spades, Card.FaceValue.Eight));// s
-    Hand pairHand = new Hand(new Card(Card.Suit.Spades, Card.FaceValue.Nine), new Card(Card.Suit.Spades, Card.FaceValue.Eight));// s
-    Hand highCardHand = new Hand(new Card(Card.Suit.Spades, Card.FaceValue.Nine), new Card(Card.Suit.Spades, Card.FaceValue.Eight));// s
-
 
 
 
@@ -44,11 +35,16 @@ public class Poker {
     }
     public void debug_game() {
 
-        System.out.println("What kind of hands do you want to be dealt? 5 - Five Card Hands(RF, SF, FH, Flush, Straight) S - sets and two pair( 2P, 3 of a kind, 4K) or P - Pair and High Card");
+        System.out.println("What kind of hands do you want to be dealt? 3k - (three of a kind hands), 5 - Five Card Hands(RF, SF, FH, Flush, Straight) S - sets and two pair( 2P, 3 of a kind, 4K)");
         dealSpecificHand(input.nextLine());
 
         List<Player> winningPlayers = handCalculator.calculateWinner(board);
-        System.out.println(winningPlayers.getFirst().getName() + " is the winner!");
+        if (winningPlayers.getFirst() != null || winningPlayers.isEmpty()) {
+            System.out.println(winningPlayers.getFirst().getName() + " is the winner!");
+        } else {
+            System.out.println("No winner??");
+        }
+
     }
     public void dealSpecificHand(String hand) {
         nextPlayerNum = dealer;
@@ -111,20 +107,38 @@ public class Poker {
                 System.out.println(player.getHand());
             }
             System.out.println(board);
-        } else if (hand.equalsIgnoreCase("h")) {
-            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.King));
-            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Eight));
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Jack));
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Eight));// pairs
+        } else if (hand.equalsIgnoreCase("3k")) {
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.King));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.King));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Jack));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Jack));
             players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Two));
-            players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));// hc
-            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Seven));
-            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Queen));
-            board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
+            players[2].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Two));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.King));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Jack));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Two));
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Four));
             board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));
             for (Player player : players) {
                 System.out.println(player.getHand());
+            }
+            System.out.println(board);
+        } else if (hand.equalsIgnoreCase("4k")) {
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Jack));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Jack));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.King));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.King));
+            players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Two));
+            players[2].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Two));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.King));
+            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.King));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Jack));
+            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Jack));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Two));
+            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Two));
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));
+            for (Player player : players) {
+                System.out.println(player.getName() + " " + player.getHand());
             }
             System.out.println(board);
         }

@@ -10,6 +10,10 @@ public class Hand {
     public Hand(Card card1, Card card2) {
     }
 
+    public Hand(List<Card> cards) {
+        this.cards.addAll(cards);
+    }
+
     public void add(Card c) {
         cards.add(c);
     }

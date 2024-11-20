@@ -9,13 +9,13 @@ import java.util.List;
 @Getter
 public class Player {
     @Setter
-    private Hand bestPair = new Hand();;
+    private Hand bestPair;
     @Setter
-    private Hand pairTwo = new Hand();;
+    private Hand pairTwo;
     @Setter
-    private Hand threeOfAKind = new Hand();
+    private Hand threeOfAKind;
     @Setter
-    private Hand quads = new Hand();;
+    private Hand quads;
     private HandValue handValue;
     @Setter
     private int stack;
@@ -77,7 +77,7 @@ public class Player {
     }
 
     public void setThreeOfAKindFromList(List<Card> cards) {
-        this.threeOfAKind.addAll(cards);
+        threeOfAKind = new Hand(cards);
     }
 
 

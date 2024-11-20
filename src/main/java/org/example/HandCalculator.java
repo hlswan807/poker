@@ -28,7 +28,7 @@ public class HandCalculator {
             if (!player.isFolded()) {
                 combined.addAll(player.getHand().getCards()); // combine hand and board cards
                 combined.addAll(board.getCards());
-                System.out.println("Player and Board: " + combined);
+
                 sortByValue();
                 if (hasRoyalFlush()) {
                     mode = HandCalculatorMode.FIVE_CARD_HANDS;
@@ -46,9 +46,13 @@ public class HandCalculator {
                     mode = HandCalculatorMode.SETS;
                     player.setHandValue(Player.HandValue.FOUR_OF_A_KIND);
                     player.setHighCard(getHighestQuads(combined));
-                    player.setKicker(getKicker(combined));
                     bestRank = Player.HandValue.FOUR_OF_A_KIND;
-                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                    System.out.println(player.getName() + " has quad " + player.getHighCard());
+                    System.out.println(player.getName() + " and Board: " + combined);
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
                 } else if (hasFullHouse()) {
                     mode = HandCalculatorMode.FIVE_CARD_HANDS;
                     player.setHandValue(Player.HandValue.FULL_HOUSE);
@@ -67,25 +71,32 @@ public class HandCalculator {
                     player.setHighCard(getHighCardInHand(combined));
                     bestRank = Player.HandValue.STRAIGHT;
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                    System.out.println(player.getName() + " and Board: " + combined);
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
                 } else if (hasThreeOfAKind()) {
                     mode = HandCalculatorMode.SETS;
                     player.setThreeOfAKindFromList(sets);
-                    System.out.println();
-                    System.out.println("Player has three of a kind " + player.getThreeOfAKind());
-                    System.out.println();
-                    System.out.println();
+
                     player.setHandValue(Player.HandValue.THREE_OF_A_KIND);
-                    player.setHighCard(getHighestTrips(combined));
-                    player.setKicker(getKicker(combined));
+                    player.setHighCard(getHighestTrips(sets));
+
                     bestRank = Player.HandValue.THREE_OF_A_KIND;
-                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                    System.out.println(player.getName() + " has a set of " + player.getHighCard());
+                    System.out.println(player.getName() + " and Board: " + combined);
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
                 } else if (hasTwoPair()) {
                     mode = HandCalculatorMode.SETS;
                     player.setHandValue(Player.HandValue.TWO_PAIR);
                     player.setHighCard(getHighestPair(combined));
                     player.setKicker(getKicker(combined));
                     bestRank = Player.HandValue.TWO_PAIR;
-                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                    System.out.println(player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else if (hasTwoOfAKind()) {
                     mode = HandCalculatorMode.SETS;
                     System.out.println("Mode set to SETS");
@@ -93,7 +104,7 @@ public class HandCalculator {
                     player.setHighCard(getHighestPair(combined));
                     player.setKicker(getKicker(combined));
                     bestRank = Player.HandValue.PAIR;
-                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                    System.out.println(player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
                 } else {
                     mode = HandCalculatorMode.HIGH_CARDS;
                     System.out.println("Mode set to HIGH_CARDS");
@@ -104,6 +115,7 @@ public class HandCalculator {
                 }
             }
             combined.clear();
+            sets.clear();
         }
         System.out.println("Calculating who won...");
         Player winner = null;
@@ -111,26 +123,38 @@ public class HandCalculator {
             case SETS:
                 System.out.print("Calculating case SETS");
                 int highest = 0;
+                int highestSecondPair = 0;
                 for (Player player : players) {
                     if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
-                        System.out.println(player.getName() + player.getHand());
+                        //System.out.println(player.getName() + player.getHand());
                         winner = player;
                     } else {
-                        if (player.getQuads() != null) {
-
-                        } else if (player.getThreeOfAKind() != null) {
-
-                        } else if (player.getBestPair() != null && player.getPairTwo() != null) { // if the player has two pair
-
-                        } else {
-
-                        }
-
+                        if (player.getQuads() != null && player.getQuads().getFirstCard().toInt() > highest) {
+                            highest = player.getQuads().getFirstCard().toInt();
+                            winner = player;
+                        } else if (player.getThreeOfAKind() != null && player.getThreeOfAKind().getFirstCard().toInt() > highest) {
                             highest = player.getThreeOfAKind().getFirstCard().toInt();
                             winner = player;
+                        } else if (player.getBestPair() != null && player.getPairTwo().getFirstCard() != null) {
+                            if ((player.getBestPair().getFirstCard().toInt() > highest) || (player.getBestPair().getFirstCard().toInt() == highest && player.getPairTwo().getFirstCard().toInt() > highestSecondPair)) {
+                                // if the player has two pair, check the first pair, if it is equal check the second pair
+                                highest = player.getBestPair().getFirstCard().toInt();
+                                highestSecondPair = player.getPairTwo().getFirstCard().toInt();
+                                winner = player;
+                            }
+                        } else if (player.getBestPair() != null && player.getBestPair().getFirstCard().toInt() > highest) {
+                            highest = player.getBestPair().getFirstCard().toInt();
+                            winner = player;
+                        }
+
+
 
                     }
                 }
+                System.out.println();
+                System.out.println();
+                System.out.println();
+                System.out.println();
                 System.out.println();
                 potentialWinners.add(winner);
                 break;
@@ -334,7 +358,7 @@ public class HandCalculator {
         // Sort by face value in descending order to get the highest card first
         hand.sort((card1, card2) -> card2.getFaceValue().ordinal() - card1.getFaceValue().ordinal());
 
-        return hand.getFirst(); // Return the highest card
+        return hand.getLast(); // Return the highest card
     }
     private Card getKicker(List<Card> hand) {
 
