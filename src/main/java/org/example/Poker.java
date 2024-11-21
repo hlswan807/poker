@@ -162,7 +162,7 @@ public class Poker {
             players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Three));
 
             board.add(new Card(Card.Suit.Spades, Card.FaceValue.Queen));
-            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.King));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Ten));
             board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Two));
             board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));

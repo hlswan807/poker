@@ -42,7 +42,7 @@ public class HandCalculator {
                     player.setHighCard(getHighCardInHand(combined));
                     bestRank = Player.HandValue.STRAIGHT_FLUSH;
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-                } else if (hasFourOfAKind()) {
+                } else if (hasFourOfAKind() && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
                     mode = HandCalculatorMode.SETS;
                     player.setHandValue(Player.HandValue.FOUR_OF_A_KIND);
                     player.setFourOfAKindFromList(sets);
@@ -77,7 +77,7 @@ public class HandCalculator {
                     System.out.println();
                     System.out.println();
                     System.out.println();
-                } else if (hasThreeOfAKind()) {
+                } else if (hasThreeOfAKind() && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
                     mode = HandCalculatorMode.SETS;
                     player.setThreeOfAKindFromList(sets);
 
@@ -91,13 +91,13 @@ public class HandCalculator {
                     System.out.println();
                     System.out.println();
                     System.out.println();
-                } else if (hasTwoPair()) {
+                } else if (hasTwoPair()  && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
                     mode = HandCalculatorMode.SETS;
                     player.setHandValue(Player.HandValue.TWO_PAIR);
                     player.setHighCard(getHighestPair(sets));
                     bestRank = Player.HandValue.TWO_PAIR;
-                    System.out.println(player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-                } else if (hasTwoOfAKind()) {
+                    System.out.println(player.getName() + " has " + player.getHandValue() + ", with the highest pair being " + player.getHighCard());
+                } else if (hasTwoOfAKind() && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
                     mode = HandCalculatorMode.SETS;
 
                     player.setHandValue(Player.HandValue.PAIR);
@@ -137,9 +137,13 @@ public class HandCalculator {
                         } else if (player.getThreeOfAKind() != null && player.getThreeOfAKind().getFirstCard().toInt() > highest) {
                             highest = player.getThreeOfAKind().getFirstCard().toInt();
                             winner = player;
-                        } else if (player.getBestPair() != null && player.getSecondBestPair() != null) {
-                            if ((player.getBestPair().getFirstCard().toInt() > highest) || (player.getBestPair().getFirstCard().toInt() == highest && player.getSecondBestPair().getFirstCard().toInt() > highestSecondPair)) {
+                        } else if (player.getBestPair() != null && player.getSecondBestPair() != null && (player.getBestPair().getFirstCard().toInt() > highest)) {
+                            if (player.getBestPair().getFirstCard().toInt() == highest && player.getSecondBestPair().getFirstCard().toInt() > highestSecondPair) {
                                 // if the player has two pair, check the first pair, if it is equal check the second pair
+                                highest = player.getBestPair().getFirstCard().toInt();
+                                highestSecondPair = player.getSecondBestPair().getFirstCard().toInt();
+                                winner = player;
+                            } else {
                                 highest = player.getBestPair().getFirstCard().toInt();
                                 highestSecondPair = player.getSecondBestPair().getFirstCard().toInt();
                                 winner = player;
