@@ -60,7 +60,7 @@ public class Poker {
             players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Eight));// sf
             players[2].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Ten));
             players[2].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Ten));// fh
-            players[3].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Two));
+            players[3].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Three));
             players[3].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Seven));// f
             players[4].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Nine));
             players[4].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Eight));// s
@@ -74,14 +74,14 @@ public class Poker {
             }
             System.out.println(board);
 
-        } else if (hand.equalsIgnoreCase("s")) {
+        } else if (hand.equalsIgnoreCase("2ps")) {
             players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));
-            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Ace));// 4k
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.King));
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Jack));// 2p
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.King));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Ace));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Ace));
 
-            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Ace));
-            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Ace));
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Ace));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.King));
             board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Three));
             board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));
@@ -153,6 +153,21 @@ public class Poker {
             board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));
             for (Player player : players) {
                 System.out.println(player.getName() + " " + player.getHand());
+            }
+            System.out.println(board);
+        } else if (hand.equalsIgnoreCase("2p")) {
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Ace));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Queen));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Three));
+
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Queen));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.King));
+            board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
+            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Two));
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));
+            for (Player player : players) {
+                System.out.println(player.getHand());
             }
             System.out.println(board);
         }
