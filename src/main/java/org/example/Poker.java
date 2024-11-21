@@ -173,7 +173,7 @@ public class Poker {
         } else if (hand.equalsIgnoreCase("hc")) {
             players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));
             players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Jack));
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Queen));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Ace));
             players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Five));
 
             board.add(new Card(Card.Suit.Spades, Card.FaceValue.Seven));

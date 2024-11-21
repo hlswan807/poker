@@ -44,6 +44,8 @@ public class Player {
     @Setter
     private Card highCard;
     @Setter
+    private Card secondBestHighCard;
+    @Setter
     private Card kicker;
     @Setter
     private Position position;
@@ -88,6 +90,10 @@ public class Player {
 
     public void setPairFromList(List<Card> cards) {
         bestPair = new Hand(cards);
+    }
+
+    public void setHighCards(List<Card> cards) {
+
     }
 
 

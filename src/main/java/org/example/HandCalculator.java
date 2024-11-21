@@ -180,12 +180,19 @@ public class HandCalculator {
                 break;
             case HIGH_CARDS:
                 System.out.print("Calculating case HIGH_CARDS");
-                int high_card = 2;
+                int highCard = 2;
+                int secondHighCard = 2;
                 for (Player player : players) {
                     System.out.print(".");
-                    if (player.getHighCard().toInt() > high_card) {
-                        high_card = player.getHighCard().toInt();
+                    if (player.getHighCard().toInt() > highCard) {
+                        highCard = player.getHighCard().toInt();
                         winner = player;
+                        secondHighCard = player.getSecondBestHighCard().toInt();
+                    } else if (player.getHighCard().toInt() == highCard && player.getSecondBestHighCard().toInt() > secondHighCard) {
+                        secondHighCard = player.getSecondBestHighCard().toInt();
+                        winner = player;
+                    } else if (player.getHighCard().toInt() == highCard && player.getSecondBestHighCard().toInt() == secondHighCard) {
+                        System.out.println("Top two high cards are the same, have not implemented past this. figure out who won on ur own.");
                     }
                 }
                 System.out.println();
@@ -217,11 +224,7 @@ public class HandCalculator {
             return true;
         } else if (bestRank == Player.HandValue.STRAIGHT_FLUSH && player.getHandValueAsInt() > 8) {
             return true;
-        } else if (bestRank == Player.HandValue.ROYAL_FLUSH && player.getHandValueAsInt() > 9) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return bestRank == Player.HandValue.ROYAL_FLUSH && player.getHandValueAsInt() > 9;
     }
 
     private void sortByValue() {
