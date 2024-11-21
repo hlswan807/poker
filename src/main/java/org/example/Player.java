@@ -11,7 +11,7 @@ public class Player {
     @Setter
     private Hand bestPair;
     @Setter
-    private Hand pairTwo;
+    private Hand secondBestPair;
     @Setter
     private Hand threeOfAKind;
     @Setter
@@ -29,6 +29,8 @@ public class Player {
     private boolean isFolded = false;
     @Setter
     private int handValueAsInt = 0;
+
+
 
 
     @Getter
@@ -78,6 +80,14 @@ public class Player {
 
     public void setThreeOfAKindFromList(List<Card> cards) {
         threeOfAKind = new Hand(cards);
+    }
+
+    public void setFourOfAKindFromList(List<Card> cards) {
+        quads = new Hand(cards);
+    }
+
+    public void setPairFromList(List<Card> cards) {
+        bestPair = new Hand(cards);
     }
 
 
