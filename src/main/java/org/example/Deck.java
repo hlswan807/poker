@@ -12,8 +12,6 @@ public class Deck {
             for (Card.FaceValue faceValue : Card.FaceValue.values()) {
                 Card card = new Card(suit, faceValue);
                 cards.add(card);
-
-
             }
         }
         shuffle();
@@ -30,9 +28,12 @@ public class Deck {
         for (Card card : cards) {
             if (card.getSuit() == suit && card.getFaceValue() == faceValue) { //look for the card
                 cards.remove(card); //found the card -> remove it from the deck and return it
-                return card;
+                return new Card(suit, faceValue);
             }
         }
+        System.out.println();
+        System.out.println("Card " + faceValue + " of " + suit + " not found!!!");
+        System.out.println();
         return null;
     }
 

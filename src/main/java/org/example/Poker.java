@@ -170,6 +170,21 @@ public class Poker {
                 System.out.println(player.getHand());
             }
             System.out.println(board);
+        } else if (hand.equalsIgnoreCase("hc")) {
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Jack));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Queen));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Five));
+
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Seven));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.King));
+            board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
+            board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Two));
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));
+            for (Player player : players) {
+                System.out.println(player.getHand());
+            }
+            System.out.println(board);
         }
 
 

@@ -112,7 +112,7 @@ public class HandCalculator {
                     player.setHandValue(Player.HandValue.HIGH_CARD);
                     player.setHighCard(getHighCardInHand(combined));
                     bestRank = Player.HandValue.HIGH_CARD;
-                    System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
+                    System.out.println(player.getName() + " has a high card of " + player.getHighCard());
                 }
             }
             combined.clear();
@@ -360,13 +360,13 @@ public class HandCalculator {
         // Sort by face value in descending order to get the highest card first
         hand.sort((card1, card2) -> card2.getFaceValue().ordinal() - card1.getFaceValue().ordinal());
 
-        return hand.getLast(); // Return the highest card
+        return hand.getFirst(); // Return the highest card
     }
     private Card getKicker(List<Card> hand) {
 
         // Sort by face value in descending order to get the highest card first
         hand.sort((card1, card2) -> card2.getFaceValue().ordinal() - card1.getFaceValue().ordinal());
-        System.out.println("Getting kicker: " + hand.getFirst());
+        //System.out.println("Getting kicker: " + hand.getFirst());
         return hand.getFirst(); // Return the highest card
     }
 
