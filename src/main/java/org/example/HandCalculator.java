@@ -8,7 +8,7 @@ import java.util.*;
 @Setter
 @Getter
 public class HandCalculator {
-    private HandCalculatorMode mode;
+    private HandCalculatorMode mode = HandCalculatorMode.HIGH_CARDS;
     private List<Card> combined = new LinkedList<>();
     private List<Card> bestFiveCards = new LinkedList<>();
     private List<Card> sets = new LinkedList<>();
@@ -28,7 +28,9 @@ public class HandCalculator {
             if (!player.isFolded()) {
                 combined.addAll(player.getHand().getCards()); // combine hand and board cards
                 combined.addAll(board.getCards());
-
+                System.out.println(combined);
+                System.out.println(player.getHand());
+                System.out.println(board.getCards());
                 sortByValue();
                 if (hasRoyalFlush()) {
                     mode = HandCalculatorMode.FIVE_CARD_HANDS;
@@ -91,11 +93,22 @@ public class HandCalculator {
                     System.out.println();
                     System.out.println();
                     System.out.println();
-                } else if (hasTwoPair()  && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
+                } else if (hasTwoPair()) {
+
                     mode = HandCalculatorMode.SETS;
                     player.setHandValue(Player.HandValue.TWO_PAIR);
                     player.setHighCard(getHighestPair(sets));
                     bestRank = Player.HandValue.TWO_PAIR;
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    System.out.println("Has two pair");
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
+                    System.out.println();
                     System.out.println(player.getName() + " has " + player.getHandValue() + ", with the highest pair being " + player.getHighCard());
                 } else if (hasTwoOfAKind() && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
                     mode = HandCalculatorMode.SETS;
