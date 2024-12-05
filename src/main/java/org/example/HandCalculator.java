@@ -115,13 +115,11 @@ public class HandCalculator {
 
                     player.setHandValue(Player.HandValue.PAIR);
                     player.setHighCard(getHighestPair(sets));
-                    player.setKicker(getKicker(combined));
+                    player.setKicker(getKicker(combined, sets));
                     player.setPairFromList(sets);
                     bestRank = Player.HandValue.PAIR;
                     System.out.println(player.getName() + " has a pair of " + player.getHighCard() + " with a kicker of " + player.getKicker());
                 } else {
-                    mode = HandCalculatorMode.HIGH_CARDS;
-                    System.out.println("Mode set to HIGH_CARDS");
                     player.setHandValue(Player.HandValue.HIGH_CARD);
                     player.setHighCard(getHighCardInHand(combined));
                     bestRank = Player.HandValue.HIGH_CARD;
@@ -382,12 +380,24 @@ public class HandCalculator {
 
         return hand.getFirst(); // Return the highest card
     }
-    private Card getKicker(List<Card> hand) {
-
+    private Card getKicker(List<Card> hand, List<Card> excluded) {
+        boolean isExcluded = false;
+        excluded.removeLast(); // remove extras from sets
+        excluded.removeLast();
+        System.out.println("Excluding: " + excluded);
         // Sort by face value in descending order to get the highest card first
         hand.sort((card1, card2) -> card2.getFaceValue().ordinal() - card1.getFaceValue().ordinal());
         //System.out.println("Getting kicker: " + hand.getFirst());
-        return hand.getFirst(); // Return the highest card
+        for (Card card : excluded) {
+            if (hand.getFirst() == card) {
+                isExcluded = true;
+            }
+        }
+        if (isExcluded) {
+            return hand.get(2); // Return the highest card if it is not excluded.
+        } else {
+            return hand.getFirst();
+        }
     }
 
 
@@ -408,10 +418,12 @@ public class HandCalculator {
         }
 
         // Check if any face value has the required count
+
         for (Map.Entry<Card.FaceValue, List<Card>> entry : faceValueToCards.entrySet()) {
             if (entry.getValue().size() == count) {
-                // Add the cards with the matching face value to the best_5_cards
+                // Add the cards with the matching face value to sets
                 sets.addAll(entry.getValue());
+
                 return true;
             }
         }
