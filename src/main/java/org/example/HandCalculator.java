@@ -105,10 +105,6 @@ public class HandCalculator {
                     System.out.println();
                     System.out.println();
                     System.out.println("Has two pair");
-                    System.out.println();
-                    System.out.println();
-                    System.out.println();
-                    System.out.println();
                     System.out.println(player.getName() + " has " + player.getHandValue() + ", with the highest pair being " + player.getHighCard());
                 } else if (hasTwoOfAKind() && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
                     mode = HandCalculatorMode.SETS;
@@ -177,10 +173,14 @@ public class HandCalculator {
                 break;
             case FIVE_CARD_HANDS:
                 System.out.println("Calculating case FIVE_CARD_HANDS");
+                System.out.println();
+                System.out.println();
+                System.out.println();
+                System.out.println();
                 int highestKicker = 2;
                 for (Player player : players) {
                     if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
-                        System.out.println(player.getName() + player.getHand());
+                        System.out.println(player.getName() + " " + player.getHandValue());
                         winner = player;
                     } else {
                         if (player.getKicker() != null && player.getKicker().toInt() > highestKicker) {
