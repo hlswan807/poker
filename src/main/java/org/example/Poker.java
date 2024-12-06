@@ -58,7 +58,7 @@ public class Poker {
             players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.King));// royal flush setup
             players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Nine));
             players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Eight));// sf
-            players[2].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Ten));
+            players[2].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ten));
             players[2].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Ten));// fh
             players[3].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Three));
             players[3].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Seven));// f
