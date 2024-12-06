@@ -48,7 +48,7 @@ public class Poker {
     }
     public void dealSpecificHand(String hand) {
         nextPlayerNum = dealer;
-        deck.pop(); // burn card
+        //deck.pop(); // burn card
         for (int i = 0; i < players.length; i++) {
             incNextPlayerNumber();
             players[nextPlayerNum].setHand(new Hand());
@@ -75,16 +75,16 @@ public class Poker {
             System.out.println(board);
 
         } else if (hand.equalsIgnoreCase("2ps")) {
-            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Ten));
             players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.King));
             players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Ace));
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Ace));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.King));
 
-            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Ace));
-            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.King));
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Queen));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Queen));
             board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Three));
-            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));
+            board.add(new Card(Card.Suit.Spades, Card.FaceValue.Two));
             for (Player player : players) {
                 System.out.println(player.getHand());
             }

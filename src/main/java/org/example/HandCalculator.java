@@ -94,10 +94,10 @@ public class HandCalculator {
                     System.out.println();
                     System.out.println();
                 } else if (hasTwoPair()) {
-
                     mode = HandCalculatorMode.SETS;
                     player.setHandValue(Player.HandValue.TWO_PAIR);
                     player.setHighCard(getHighestPair(sets));
+                    player.setBestPair(getHighestPairAsHand(sets));
                     bestRank = Player.HandValue.TWO_PAIR;
                     System.out.println();
                     System.out.println();
@@ -106,7 +106,7 @@ public class HandCalculator {
                     System.out.println();
                     System.out.println("Has two pair");
                     System.out.println(player.getName() + " has " + player.getHandValue() + ", with the highest pair being " + player.getHighCard());
-                } else if (hasTwoOfAKind() && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
+                } else if (hasTwoOfAKind() && !hasTwoPair() && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
                     mode = HandCalculatorMode.SETS;
 
                     player.setHandValue(Player.HandValue.PAIR);
@@ -126,18 +126,24 @@ public class HandCalculator {
             sets.clear();
             bestFiveCards.clear();
         }
+        for (Player player : players) {
+            System.out.println("Player " + player.getName() + " has " + player.getHandValue());
+        }
         System.out.println("Calculating who won...");
         Player winner = null;
         switch (mode) {
             case SETS:
-                System.out.print("Calculating case SETS");
+                System.out.println("Calculating case SETS");
                 int highest = 0;
                 int highestSecondPair = 0;
                 for (Player player : players) {
+                    System.out.println("Calculating.. Player " + player.getName() + " has " + player.getHandValue() + " " + player.getHand());
                     if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
-                        //System.out.println(player.getName() + player.getHand());
+                        bestRank = player.getHandValue();
+                        System.out.println(bestRank + " " + player.getHand());
                         winner = player;
-                    } else {
+                    } else if (!player.isFolded() && playerRankIsEqualTo(bestRank, player)) {
+                        System.out.println(bestRank + " " + player.getHand());
                         if (player.getQuads() != null && player.getQuads().getFirstCard().toInt() > highest) {
                             highest = player.getQuads().getFirstCard().toInt();
                             winner = player;
@@ -159,16 +165,12 @@ public class HandCalculator {
                             highest = player.getBestPair().getFirstCard().toInt();
                             winner = player;
                         }
-
-
-
                     }
                 }
                 System.out.println();
                 System.out.println();
                 System.out.println();
-                System.out.println();
-                System.out.println();
+
                 potentialWinners.add(winner);
                 break;
             case FIVE_CARD_HANDS:
@@ -241,6 +243,28 @@ public class HandCalculator {
             return true;
         } else return bestRank == Player.HandValue.ROYAL_FLUSH && player.getHandValueAsInt() > 9;
     }
+    private boolean playerRankIsEqualTo(Player.HandValue bestRank, Player player) {
+        if (bestRank == Player.HandValue.HIGH_CARD && player.getHandValueAsInt() == 0) {
+            return true;
+        } else if (bestRank == Player.HandValue.PAIR && player.getHandValueAsInt() == 1) {
+            return true;
+        } else if (bestRank == Player.HandValue.TWO_PAIR && player.getHandValueAsInt() == 2) {
+            return true;
+        } else if (bestRank == Player.HandValue.THREE_OF_A_KIND && player.getHandValueAsInt() == 3) {
+            return true;
+        } else if (bestRank == Player.HandValue.STRAIGHT && player.getHandValueAsInt() == 4) {
+            return true;
+        } else if (bestRank == Player.HandValue.FLUSH && player.getHandValueAsInt() == 5) {
+            return true;
+        } else if (bestRank == Player.HandValue.FULL_HOUSE && player.getHandValueAsInt() == 6) {
+            return true;
+        } else if (bestRank == Player.HandValue.FOUR_OF_A_KIND && player.getHandValueAsInt() == 7) {
+            return true;
+        } else if (bestRank == Player.HandValue.STRAIGHT_FLUSH && player.getHandValueAsInt() == 8) {
+            return true;
+        } else return bestRank == Player.HandValue.ROYAL_FLUSH && player.getHandValueAsInt() == 9;
+    }
+
 
     private void sortByValue() {
         combined.sort(Comparator.comparingInt(card -> card.getFaceValue().ordinal())); // sorts the cards by face value, lowest to highest
@@ -371,6 +395,10 @@ public class HandCalculator {
     }
     private Card getHighestPair(List<Card> hand) {
         return hand.getFirst();
+    }
+    private Hand getHighestPairAsHand(List<Card> hand) {
+        Hand hand1 = new Hand(hand);
+        return (hand1.getFirstTwoCards());
     }
     
     private Card getHighCardInHand(List<Card> hand) {

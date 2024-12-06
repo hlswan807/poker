@@ -28,6 +28,13 @@ public class Hand {
         return cards.get(0);
     }
 
+    public Hand getFirstTwoCards() {
+        Hand hand = new Hand();
+        hand.add(cards.getFirst());
+        hand.add(cards.get(1));
+        return hand;
+    }
+
     public void clear() {
         cards.clear();
     }
