@@ -39,13 +39,13 @@ public class HandCalculator {
                     player.setHighCard(getHighCardInHand(combined));
 
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-                } else if (hasStraightFlush() && bestRank != Player.HandValue.ROYAL_FLUSH) {
+                } else if (hasStraightFlush()) {
                     mode = HandCalculatorMode.FIVE_CARD_HANDS;
                     player.setHandValue(Player.HandValue.STRAIGHT_FLUSH);
                     player.setHighCard(getHighCardInHand(combined));
 
                     System.out.println("Player " + player.getName() + " has a " + player.getHandValue() + ", with a high card of " + player.getHighCard());
-                } else if (hasFourOfAKind() && mode != HandCalculatorMode.FIVE_CARD_HANDS && (bestRank != Player.HandValue.ROYAL_FLUSH || bestRank != Player.HandValue.STRAIGHT_FLUSH)) {
+                } else if (hasFourOfAKind() && mode != HandCalculatorMode.FIVE_CARD_HANDS) {
                     mode = HandCalculatorMode.SETS;
                     player.setHandValue(Player.HandValue.FOUR_OF_A_KIND);
                     player.setFourOfAKindFromList(sets);
@@ -87,7 +87,7 @@ public class HandCalculator {
                     player.setHandValue(Player.HandValue.THREE_OF_A_KIND);
                     player.setHighCard(getHighestTrips(sets));
 
-                    bestRank = Player.HandValue.THREE_OF_A_KIND;
+
                     System.out.println(player.getName() + " has a set of " + player.getHighCard());
                     System.out.println(player.getName() + " and Board: " + combined);
                     System.out.println();
@@ -99,7 +99,7 @@ public class HandCalculator {
                     player.setHandValue(Player.HandValue.TWO_PAIR);
                     player.setHighCard(getHighestPair(sets));
                     player.setBestPair(getHighestPairAsHand(sets));
-                    bestRank = Player.HandValue.TWO_PAIR;
+
                     System.out.println();
                     System.out.println();
                     System.out.println();
@@ -113,12 +113,12 @@ public class HandCalculator {
                     player.setHighCard(getHighestPair(sets));
                     player.setKicker(getKicker(combined, sets));
                     player.setPairFromList(sets);
-                    bestRank = Player.HandValue.PAIR;
+
                     System.out.println(player.getName() + " has a pair of " + player.getHighCard() + " with a kicker of " + player.getKicker());
                 } else {
                     player.setHandValue(Player.HandValue.HIGH_CARD);
                     player.setHighCard(getHighCardInHand(combined));
-                    bestRank = Player.HandValue.HIGH_CARD;
+
                     System.out.println(player.getName() + " has a high card of " + player.getHighCard());
                 }
             }
@@ -171,6 +171,23 @@ public class HandCalculator {
                 System.out.println();
                 System.out.println();
 
+                potentialWinners.add(winner);
+                break;
+            case FULL_HOUSES:
+                System.out.println("Calculating case FULL_HOUSES");
+                List<Card> highestSet;
+                List<Card> highestPair;
+                for (Player player : players) {
+                    System.out.println("Calculating.. Player " + player.getName() + " has " + player.getHandValue() + " " + player.getHand());
+                    if (playerRankIsHigherThan(bestRank, player) && !player.isFolded()){
+                        bestRank = player.getHandValue();
+                        System.out.println(bestRank + " " + player.getHand());
+                        winner = player;
+                    }
+                }
+                System.out.println();
+                System.out.println();
+                System.out.println();
                 potentialWinners.add(winner);
                 break;
             case FIVE_CARD_HANDS:

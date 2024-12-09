@@ -14,7 +14,7 @@ public class Main {
         input.nextLine();
 
         while (playContinues) {
-            poker.game();
+            poker.debug_game();
             playAgain();
         }
     }
