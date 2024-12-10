@@ -22,8 +22,40 @@ public class HandCalculator {
     }
 
     public List<Player> calculateWinner(Board board) {
-        Player.HandValue bestRank = Player.HandValue.HIGH_CARD;
         List<Player> potentialWinners = new ArrayList<>();
+        // assign each player a hand value
+        // check for highest hand value
+        // highest hand value wins
+        // if two hand values are the same then
+        // check what type of hand values are the same then do something specific for those two hand values.
+        // ex, two players with pairs would have the pairs compared.
+        for (Player player : players) {
+            if (!player.isFolded()) {
+                combined.addAll(player.getHand().getCards());
+                combined.addAll(board.getCards());
+                System.out.println("Added hand and board cards to combined list \n" + combined);
+                System.out.println("--------------------------------------------------- \n");
+                sortByValue();
+                System.out.println("Sorted hand and board cards \n" + combined);
+                System.out.println("---------------------------------------------------");
+            } else {
+                continue;
+            }
+            if (hasRoyalFlush()) {
+                potentialWinners.add(player);
+                //this player outright wins
+                combined.clear();
+                break;
+            } else if (hasStraightFlush()) {
+                System.out.println("Player " + player.getName() + " has a straight flush");
+                System.out.println("--------------------------------------------------- \n");
+            }
+        }
+
+
+
+        Player.HandValue bestRank = Player.HandValue.HIGH_CARD;
+
         for (Player player : players) {
             if (!player.isFolded()) {
 
