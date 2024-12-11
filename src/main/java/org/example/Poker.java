@@ -35,6 +35,7 @@ public class Poker {
     }
     public void debug_game() {
 
+
         System.out.println("What kind of hands do you want to be dealt? 3k - (three of a kind hands), 4k (quads), 5 - Five Card Hands(RF, SF, FH, Flush, Straight) S - sets and two pair( 2P, 4K) P - pairs");
         dealSpecificHand(input.nextLine());
 
@@ -74,7 +75,15 @@ public class Poker {
             }
             System.out.println(board);
 
-        } else if (hand.equalsIgnoreCase("2ps")) {
+
+
+        } else if (hand.equalsIgnoreCase("r")) {
+            dealHand();
+            dealFlop();
+            dealTurn();
+            dealRiver();
+        }
+        else if (hand.equalsIgnoreCase("2ps")) {
             players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Ten));
             players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.King));
             players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Ace));

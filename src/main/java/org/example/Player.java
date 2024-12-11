@@ -39,8 +39,9 @@ public class Player {
     }
     @Getter
     public enum HandValue {
-        ROYAL_FLUSH, STRAIGHT_FLUSH, FOUR_OF_A_KIND, FULL_HOUSE, FLUSH, STRAIGHT, THREE_OF_A_KIND, TWO_PAIR, PAIR, HIGH_CARD
+        HIGH_CARD, PAIR, TWO_PAIR, THREE_OF_A_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLUSH, ROYAL_FLUSH
     }
+
     @Setter
     private Card highCard;
     @Setter
@@ -57,26 +58,37 @@ public class Player {
     }
     public void setHandValue(HandValue handValue1) {
         handValue = handValue1;
-        if (handValue1 == HandValue.HIGH_CARD) {
-            setHandValueAsInt(0);
-        } else if (handValue1 == HandValue.PAIR) {
-            setHandValueAsInt(1);
-        } else if (handValue1 == HandValue.TWO_PAIR) {
-            setHandValueAsInt(2);
-        } else if (handValue1 == HandValue.THREE_OF_A_KIND) {
-            setHandValueAsInt(3);
-        } else if (handValue1 == HandValue.STRAIGHT) {
-            setHandValueAsInt(4);
-        } else if (handValue1 == HandValue.FLUSH) {
-            setHandValueAsInt(5);
-        } else if (handValue1 == HandValue.FULL_HOUSE) {
-            setHandValueAsInt(6);
-        } else if (handValue1 == HandValue.FOUR_OF_A_KIND) {
-            setHandValueAsInt(7);
-        } else if (handValue1 == HandValue.STRAIGHT_FLUSH) {
-            setHandValueAsInt(8);
-        } else if (handValue1 == HandValue.ROYAL_FLUSH) {
-            setHandValueAsInt(9);
+        switch (handValue1) {
+            case HIGH_CARD:
+                handValueAsInt = 1;
+                break;
+            case PAIR:
+                handValueAsInt = 2;
+                break;
+            case TWO_PAIR:
+                handValueAsInt = 3;
+                break;
+            case THREE_OF_A_KIND:
+                handValueAsInt = 4;
+                break;
+            case STRAIGHT:
+                handValueAsInt = 5;
+                break;
+            case FLUSH:
+                handValueAsInt = 6;
+                break;
+            case FULL_HOUSE:
+                handValueAsInt = 7;
+                break;
+            case FOUR_OF_A_KIND:
+                handValueAsInt = 8;
+                break;
+            case STRAIGHT_FLUSH:
+                handValueAsInt = 9;
+                break;
+            case ROYAL_FLUSH:
+                handValueAsInt = 10;
+                break;
         }
     }
 
