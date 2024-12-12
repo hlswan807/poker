@@ -40,7 +40,7 @@ public class Poker {
         dealSpecificHand(input.nextLine());
 
         List<Player> winningPlayers = handCalculator.calculateWinner(board);
-        if (winningPlayers.getFirst() != null || winningPlayers.isEmpty()) {
+        if (winningPlayers.getFirst() != null || !winningPlayers.isEmpty()) {
             System.out.println(winningPlayers.getFirst().getName() + " is the winner!");
         } else {
             System.out.println("No winner??");
@@ -181,12 +181,12 @@ public class Poker {
             System.out.println(board);
         } else if (hand.equalsIgnoreCase("hc")) {
             players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));
-            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Jack));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Five));
             players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.Ace));
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Five));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.Jack));
 
             board.add(new Card(Card.Suit.Spades, Card.FaceValue.Seven));
-            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.King));
+            board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Six));
             board.add(new Card(Card.Suit.Hearts, Card.FaceValue.Ten));
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Two));
             board.add(new Card(Card.Suit.Spades, Card.FaceValue.Three));

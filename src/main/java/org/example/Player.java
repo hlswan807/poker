@@ -31,12 +31,11 @@ public class Player {
     private int handValueAsInt = 0;
 
 
-
-
     @Getter
     enum Position {
         UTG, UTGPlus1, UTGPlus2, LG, HJ, CO, BTN, SB, BB,
     }
+
     @Getter
     public enum HandValue {
         HIGH_CARD, PAIR, TWO_PAIR, THREE_OF_A_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLUSH, ROYAL_FLUSH
@@ -56,6 +55,7 @@ public class Player {
         this.name = name;
 
     }
+
     public void setHandValue(HandValue handValue1) {
         handValue = handValue1;
         switch (handValue1) {
@@ -105,15 +105,17 @@ public class Player {
     }
 
     public void setHighCards(List<Card> cards) {
+        cards.sort((card1, card2) -> card2.getFaceValue().ordinal() - card1.getFaceValue().ordinal());
 
+        highCard = cards.getFirst();
+        secondBestHighCard = cards.get(1);
     }
-
 
 
     public void bet(int amount) {
         stack -= amount;
         currentBet += amount;
-        System.out.println(" "+name + " bets " + amount + ", Player's current bet=" + currentBet);
+        System.out.println(" " + name + " bets " + amount + ", Player's current bet=" + currentBet);
 
     }
 
@@ -133,5 +135,6 @@ public class Player {
     public void addChips(int chips) {
         stack += chips;
     }
-
 }
+
+

@@ -110,6 +110,7 @@ public class HandCalculator {
                 System.out.println("Setting player hand value to PAIR and setting handValueAsInt to 2");
                 player.setHandValueAsInt(2);
                 player.setHandValue(Player.HandValue.PAIR);
+                player.setKicker(getKickerWithExclusion(combined, sets));
                 getBestRank(player);
             } else {
                 System.out.println("Player " + player.getName() + " has a high card");
@@ -117,6 +118,7 @@ public class HandCalculator {
                 System.out.println("Setting player hand value to HIGH_CARD and setting handValueAsInt to 1");
                 player.setHandValueAsInt(1);
                 player.setHandValue(Player.HandValue.HIGH_CARD);
+                player.setHighCards(combined);
                 getBestRank(player);
             }
             System.out.println("Clearing combined and sets");
@@ -249,25 +251,43 @@ public class HandCalculator {
             if (potentialWinners.size() == 2) {
                 System.out.println("Found two potential winners! " + potentialWinners.getFirst().getName() + " and " + potentialWinners.get(1).getName() + " have the same hand value of " + bestRank + "(" + potentialWinners.getFirst().getHandValue() + ")");
                 if (potentialWinners.getFirst().getHandValueAsInt() == 1) {
-                    System.out.print("Calculating that both players have HIGH_CARDS");
+                    System.out.println("Calculating that both players have HIGH_CARDS");
                     int highCard = 2;
                     int secondHighCard = 2;
                     for (Player player : players) {
                         if (player.getHighCard().toInt() > highCard) {
+                            System.out.println();
                             highCard = player.getHighCard().toInt();
                             currentWinner = player;
                             secondHighCard = player.getSecondBestHighCard().toInt();
                         } else if (player.getHighCard().toInt() == highCard && player.getSecondBestHighCard().toInt() > secondHighCard) {
+                            System.out.println("First high card is the same, checking second high card");
                             secondHighCard = player.getSecondBestHighCard().toInt();
                             currentWinner = player;
                         } else if (player.getHighCard().toInt() == highCard && player.getSecondBestHighCard().toInt() == secondHighCard) {
                             System.out.println("Top two high cards are the same, have not implemented past this. figure out who won on ur own.");
                         }
                     }
-                    winners.add(currentWinner);
+
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 2) {
+                    int highest = 0;
+                    int highestKicker = 0;
                     System.out.print("Calculating that both players have a PAIR");
+                    for (Player player : players) {
+                        if (player.getBestPair().getFirstCard().toInt() > highest) {
+                            highest = player.getBestPair().getFirstCard().toInt();
+                            currentWinner = player;
+                        } else if (player.getBestPair().getFirstCard().toInt() == highest) {
+                            System.out.println("Pairs are the same, checking kicker");
+                            if (player.getKicker().toInt() > highestKicker) {
+                                highestKicker = player.getKicker().toInt();
+                                currentWinner = player;
+                            }
+                        }
+                    }
+
                 }
+                winners.add(currentWinner);
             }
         }
         Player winner = null;
@@ -348,26 +368,6 @@ public class HandCalculator {
                             winner = player;
                             System.out.println(player.getName() + player.getHand());
                         }
-                    }
-                }
-                System.out.println();
-                winners.add(winner);
-                break;
-            case HIGH_CARDS:
-                System.out.print("Calculating case HIGH_CARDS");
-                int highCard = 2;
-                int secondHighCard = 2;
-                for (Player player : players) {
-                    System.out.print(".");
-                    if (player.getHighCard().toInt() > highCard) {
-                        highCard = player.getHighCard().toInt();
-                        winner = player;
-                        secondHighCard = player.getSecondBestHighCard().toInt();
-                    } else if (player.getHighCard().toInt() == highCard && player.getSecondBestHighCard().toInt() > secondHighCard) {
-                        secondHighCard = player.getSecondBestHighCard().toInt();
-                        winner = player;
-                    } else if (player.getHighCard().toInt() == highCard && player.getSecondBestHighCard().toInt() == secondHighCard) {
-                        System.out.println("Top two high cards are the same, have not implemented past this. figure out who won on ur own.");
                     }
                 }
                 System.out.println();
@@ -579,11 +579,11 @@ public class HandCalculator {
 
         return hand.getFirst(); // Return the highest card
     }
-    private Card getKicker(List<Card> hand, List<Card> excluded) {
+    private Card getKickerWithExclusion(List<Card> hand, List<Card> excluded) {
         boolean isExcluded = false;
         excluded.removeLast(); // remove extras from sets
         excluded.removeLast();
-        System.out.println("Excluding: " + excluded);
+        System.out.println("Getting kicker, excluding: " + excluded + " because they are the pair.");
         // Sort by face value in descending order to get the highest card first
         hand.sort((card1, card2) -> card2.getFaceValue().ordinal() - card1.getFaceValue().ordinal());
         //System.out.println("Getting kicker: " + hand.getFirst());
@@ -622,7 +622,6 @@ public class HandCalculator {
             if (entry.getValue().size() == count) {
                 // Add the cards with the matching face value to sets
                 sets.addAll(entry.getValue());
-
                 return true;
             }
         }
