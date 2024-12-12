@@ -151,10 +151,10 @@ public class Poker {
             }
             System.out.println(board);
         } else if (hand.equalsIgnoreCase("split")) {
-            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.King));
-            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.King));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Ace));
+            players[0].addCard(deck.popSpecificCard(Card.Suit.Spades, Card.FaceValue.Jack));
             players[1].addCard(deck.popSpecificCard(Card.Suit.Clubs, Card.FaceValue.King));
-            players[1].addCard(deck.popSpecificCard(Card.Suit.Diamonds, Card.FaceValue.King));
+            players[1].addCard(deck.popSpecificCard(Card.Suit.Hearts, Card.FaceValue.Jack));
             board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Jack));
             board.add(new Card(Card.Suit.Clubs, Card.FaceValue.Nine));
             board.add(new Card(Card.Suit.Diamonds, Card.FaceValue.Four));

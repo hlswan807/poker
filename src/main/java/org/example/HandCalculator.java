@@ -110,6 +110,7 @@ public class HandCalculator {
                 System.out.println("Setting player hand value to PAIR and setting handValueAsInt to 2");
                 player.setHandValueAsInt(2);
                 player.setHandValue(Player.HandValue.PAIR);
+                player.setPairFromList(sets);
                 player.setKicker(getKickerWithExclusion(combined, sets));
                 getBestRank(player);
             } else {
@@ -272,13 +273,15 @@ public class HandCalculator {
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 2) {
                     int highest = 0;
                     int highestKicker = 0;
-                    System.out.print("Calculating that both players have a PAIR");
+                    System.out.println("Calculating that both players have a PAIR");
                     for (Player player : players) {
                         if (player.getBestPair().getFirstCard().toInt() > highest) {
                             highest = player.getBestPair().getFirstCard().toInt();
                             currentWinner = player;
+                            highestKicker = player.getKicker().toInt();
                         } else if (player.getBestPair().getFirstCard().toInt() == highest) {
                             System.out.println("Pairs are the same, checking kicker");
+                            System.out.println(player.getName() + " has a kicker of a " + player.getKicker());
                             if (player.getKicker().toInt() > highestKicker) {
                                 highestKicker = player.getKicker().toInt();
                                 currentWinner = player;
