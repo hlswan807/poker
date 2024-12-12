@@ -253,7 +253,6 @@ public class HandCalculator {
                 }
             }
         }
-
         Player winner = null;
         switch (mode) {
             case SETS:
