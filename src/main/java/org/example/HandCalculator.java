@@ -127,7 +127,7 @@ public class HandCalculator {
 
 
 
-        Player.HandValue bestR = Player.HandValue.HIGH_CARD;
+
 
 //        for (Player player : players) {
 //            if (!player.isFolded()) {
@@ -231,7 +231,7 @@ public class HandCalculator {
 //            sets.clear();
 //            bestFiveCards.clear();
 //        }
-
+        Player.HandValue bestR = Player.HandValue.HIGH_CARD;
         System.out.println("Calculating who won...");
         for (Player player : players) {
             System.out.println("Calculating.. Player " + player.getName() + " has " + player.getHandValue());
@@ -240,7 +240,7 @@ public class HandCalculator {
                 potentialWinners.add(player);
             }
         }
-
+        Player currentWinner = null;
         if (potentialWinners.size() == 1) {
             System.out.println("Found one winner! " + potentialWinners.getFirst().getName() + " has the highest hand value of " + potentialWinners.getFirst().getHandValue());
             return potentialWinners;
@@ -249,7 +249,24 @@ public class HandCalculator {
             if (potentialWinners.size() == 2) {
                 System.out.println("Found two potential winners! " + potentialWinners.getFirst().getName() + " and " + potentialWinners.get(1).getName() + " have the same hand value of " + bestRank + "(" + potentialWinners.getFirst().getHandValue() + ")");
                 if (potentialWinners.getFirst().getHandValueAsInt() == 1) {
-
+                    System.out.print("Calculating that both players have HIGH_CARDS");
+                    int highCard = 2;
+                    int secondHighCard = 2;
+                    for (Player player : players) {
+                        if (player.getHighCard().toInt() > highCard) {
+                            highCard = player.getHighCard().toInt();
+                            currentWinner = player;
+                            secondHighCard = player.getSecondBestHighCard().toInt();
+                        } else if (player.getHighCard().toInt() == highCard && player.getSecondBestHighCard().toInt() > secondHighCard) {
+                            secondHighCard = player.getSecondBestHighCard().toInt();
+                            currentWinner = player;
+                        } else if (player.getHighCard().toInt() == highCard && player.getSecondBestHighCard().toInt() == secondHighCard) {
+                            System.out.println("Top two high cards are the same, have not implemented past this. figure out who won on ur own.");
+                        }
+                    }
+                    winners.add(currentWinner);
+                } else if (potentialWinners.getFirst().getHandValueAsInt() == 2) {
+                    System.out.print("Calculating that both players have a PAIR");
                 }
             }
         }
