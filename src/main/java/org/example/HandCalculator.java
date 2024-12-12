@@ -289,6 +289,20 @@ public class HandCalculator {
                         }
                     }
 
+                } else if (potentialWinners.getFirst().getHandValueAsInt() == 3) {
+                    System.out.println("Calculating that both players have TWO_PAIR");
+                } else if (potentialWinners.getFirst().getHandValueAsInt() == 4) {
+                    System.out.println("Calculating that both players have THREE_OF_A_KIND");
+                } else if (potentialWinners.getFirst().getHandValueAsInt() == 5) {
+                    System.out.println("Calculating that both players have STRAIGHT");
+                } else if (potentialWinners.getFirst().getHandValueAsInt() == 6) {
+                    System.out.println("Calculating that both players have FLUSH");
+                } else if (potentialWinners.getFirst().getHandValueAsInt() == 7) {
+                    System.out.println("Calculating that both players have FULL_HOUSE");
+                } else if (potentialWinners.getFirst().getHandValueAsInt() == 8) {
+                    System.out.println("Calculating that both players have FOUR_OF_A_KIND");
+                } else if (potentialWinners.getFirst().getHandValueAsInt() == 9) {
+                    System.out.println("Calculating that both players have STRAIGHT_FLUSH");
                 }
                 winners.add(currentWinner);
             }
