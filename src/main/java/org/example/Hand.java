@@ -24,8 +24,12 @@ public class Hand {
     public List<Card> getCards() {
         return cards;
     }
+
+    public Card getCard(int index) {
+        return cards.get(index);
+    }
     public Card getFirstCard() {
-        return cards.get(0);
+        return cards.getFirst();
     }
 
     public Hand getFirstTwoCards() {
@@ -42,4 +46,6 @@ public class Hand {
     public void addAll(List<Card> cards) {
         this.cards.addAll(cards);
     }
+
+
 }

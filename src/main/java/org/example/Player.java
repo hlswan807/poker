@@ -49,6 +49,8 @@ public class Player {
     private Card kicker;
     @Setter
     private Position position;
+    @Setter
+    private boolean isPlayingTheBoard;
 
     public Player(String name, int startingStack) {
         stack = startingStack;
