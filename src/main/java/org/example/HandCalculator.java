@@ -283,31 +283,34 @@ public class HandCalculator {
                     int highestKicker = 0;
                     System.out.println("Calculating that both players have a PAIR");
                     for (Player player : players) {
-                        System.out.println("Current highest " + highest + " " + player.getName());
+                        System.out.println("Current highest pair " + highest + " " + player.getName());
                         if (player.getBestPair().getFirstCard().toInt() > highest) {
                             highest = player.getBestPair().getFirstCard().toInt();
                             currentWinner = player;
                             highestKicker = player.getKicker().toInt();
+                            System.out.println(player.getName() + " has a kicker of " + player.getKicker());
                         } else if (player.getBestPair().getFirstCard().toInt() == highest) {
                             System.out.println("Pairs are the same, checking kicker");
-                            System.out.println(player.getName() + " has a kicker of a " + player.getKicker());
-                            if (player.getKicker().toInt() > highestKicker) {
-                                highestKicker = player.getKicker().toInt();
-                                currentWinner = player;
-                            } else {
-                                System.out.println(player.getName() + " doesn't have a kicker higher");
+                            for (Player p : players) {
+                                System.out.println(p.getName() + " has a kicker of a " + p.getKicker());
+                                if (p.getKicker().toInt() > highestKicker) {
+                                    highestKicker = p.getKicker().toInt();
+                                    currentWinner = p;
+                                } else {
+                                    System.out.println(p.getName() + " doesn't have a kicker higher");
+                                }
                             }
                         }
                     }
 
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 3) {
-                    System.out.println("Calculating that both players have TWO_PAIR");
+                    System.out.println("Calculating that both players have TWO_PAIR"); // todo this is broken
                     int highestPair = 0;
                     int secondHighest = 0;
 
                     for (Player player : players) {
-                        System.out.println("Current highest " + highestPair);
-                        System.out.print("Current second highest " + secondHighest);
+                        System.out.println("Current highest pair " + highestPair);
+                        System.out.print("Current second highest pair " + secondHighest);
                         if (player.getBestPair().getFirstCard().toInt() > highestPair) {
                             highestPair = player.getBestPair().getFirstCard().toInt();
                             currentWinner = player;
@@ -325,109 +328,27 @@ public class HandCalculator {
                     }
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 4) {
                     System.out.println("Calculating that both players have THREE_OF_A_KIND");
+                    currentWinner = players[0];
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 5) {
                     System.out.println("Calculating that both players have STRAIGHT");
+                    currentWinner = players[0];
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 6) {
                     System.out.println("Calculating that both players have FLUSH");
+                    currentWinner = players[0];
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 7) {
                     System.out.println("Calculating that both players have FULL_HOUSE");
+                    currentWinner = players[0];
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 8) {
                     System.out.println("Calculating that both players have FOUR_OF_A_KIND");
+                    currentWinner = players[0];
                 } else if (potentialWinners.getFirst().getHandValueAsInt() == 9) {
                     System.out.println("Calculating that both players have STRAIGHT_FLUSH");
+                    currentWinner = players[0];
                 }
                 winners.add(currentWinner);
                 assert currentWinner != null;
-                System.out.println(currentWinner.getName());
             }
         }
-        Player winner = null;
-        switch (mode) {
-            case SETS:
-                System.out.println("Calculating case SETS");
-                int highest = 0;
-                int highestSecondPair = 0;
-                for (Player player : players) {
-                    System.out.println("Calculating.. Player " + player.getName() + " has " + player.getHandValue() + " " + player.getHand());
-                    if (playerRankIsHigherThan(bestR, player) && !player.isFolded()){
-                        bestR = player.getHandValue();
-                        System.out.println(bestR + " " + player.getHand());
-                        winner = player;
-                    } else if (!player.isFolded() && playerRankIsEqualTo(bestR, player)) {
-                        System.out.println(bestR + " " + player.getHand());
-                        if (player.getQuads() != null && player.getQuads().getFirstCard().toInt() > highest) {
-                            highest = player.getQuads().getFirstCard().toInt();
-                            winner = player;
-                        } else if (player.getThreeOfAKind() != null && player.getThreeOfAKind().getFirstCard().toInt() > highest) {
-                            highest = player.getThreeOfAKind().getFirstCard().toInt();
-                            winner = player;
-                        } else if (player.getBestPair() != null && player.getSecondBestPair() != null && (player.getBestPair().getFirstCard().toInt() > highest)) {
-                            if (player.getBestPair().getFirstCard().toInt() == highest && player.getSecondBestPair().getFirstCard().toInt() > highestSecondPair) {
-                                // if the player has two pair, check the first pair, if it is equal check the second pair
-                                highest = player.getBestPair().getFirstCard().toInt();
-                                highestSecondPair = player.getSecondBestPair().getFirstCard().toInt();
-                                winner = player;
-                            } else {
-                                highest = player.getBestPair().getFirstCard().toInt();
-                                highestSecondPair = player.getSecondBestPair().getFirstCard().toInt();
-                                winner = player;
-                            }
-                        } else if (player.getBestPair() != null && player.getBestPair().getFirstCard().toInt() > highest) {
-                            highest = player.getBestPair().getFirstCard().toInt();
-                            winner = player;
-                        }
-                    }
-                }
-                System.out.println();
-                System.out.println();
-                System.out.println();
-
-                winners.add(winner);
-                break;
-            case FULL_HOUSES:
-                System.out.println("Calculating case FULL_HOUSES");
-                List<Card> highestSet;
-                List<Card> highestPair;
-                for (Player player : players) {
-                    System.out.println("Calculating.. Player " + player.getName() + " has " + player.getHandValue() + " " + player.getHand());
-                    if (playerRankIsHigherThan(bestR, player) && !player.isFolded()){
-                        bestR = player.getHandValue();
-                        System.out.println(bestR + " " + player.getHand());
-                        winner = player;
-                    }
-                }
-                System.out.println();
-                System.out.println();
-                System.out.println();
-                winners.add(winner);
-                break;
-            case FIVE_CARD_HANDS:
-                System.out.println("Calculating case FIVE_CARD_HANDS");
-                System.out.println();
-                System.out.println();
-                System.out.println();
-                System.out.println();
-                int highestKicker = 2;
-                for (Player player : players) {
-                    if (playerRankIsHigherThan(bestR, player) && !player.isFolded()){
-                        bestR = player.getHandValue();
-                        System.out.println(player.getName() + " " + player.getHandValue());
-                        winner = player;
-                    } else {
-                        if (player.getKicker() != null && player.getKicker().toInt() > highestKicker) {
-                            highestKicker = player.getKicker().toInt();
-                            winner = player;
-                            System.out.println(player.getName() + player.getHand());
-                        }
-                    }
-                }
-                System.out.println();
-                winners.add(winner);
-                break;
-            default:
-                break;
-        }
-
         return winners;
     }
 
